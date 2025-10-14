@@ -10,8 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <pthread.h> // POSIX thread library
 
+#ifndef PHILOS_H
+# define PHILOS_H
+
+# include <stdio.h> // printf() funct
+# include <unistd.h> // for sleep() funct
+# include <pthread.h> // POSIX thread library
+# include "libft.h" // libft helper funct
+
+
+
+
+#endif
 
