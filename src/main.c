@@ -15,12 +15,19 @@
 // playing around with threads
 // how to create a thread? -> we are going to use 
 
-int main(int ac, char **av)
+int main(int argc, char **argv)
 {
-	//if (ac < )
+	t_philo *philos;
+	int conv_philos_num;
+	int i;
 
-
-
+	if (argc != 2)
+		return (EXIT_FAILURE);
+	conv_philos_num = ft_atoi(argv[1]);
+	philos = ft_calloc(conv_philos_num, sizeof(t_philo));
+	if (!philos)
+		return (ALLOCATING_FAILED);
+	
 
 
 	return (0);
