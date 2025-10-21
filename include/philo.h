@@ -10,8 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <pthread.h> // POSIX thread library
+
+#ifndef PHILOS_H
+# define PHILOS_H
+# define ALLOCATING_FAILED 2
+# define INVALID_PHILOS 1
+# define FAILED_CREATING_THREADS 3
+# define FAILED_JOINING_THREADS 4
+
+# include <stdio.h> // printf() funct
+# include <unistd.h> // for sleep funct
+# include <pthread.h> // POSIX thread library
+# include <stdlib.h> // malloc, free funct
+
+typedef struct s_philo
+{
+	pthread_t *thread;
+	
+} t_philo;
 
 
+#endif
