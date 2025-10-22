@@ -13,10 +13,10 @@
 
 #ifndef PHILOS_H
 # define PHILOS_H
-# define ALLOCATING_FAILED 2
+# define ALLOCATING_FAILED 1
 # define INVALID_PHILOS 1
-# define FAILED_CREATING_THREADS 3
-# define FAILED_JOINING_THREADS 4
+# define FAILED_CREATING_THREADS 1
+# define FAILED_JOINING_THREADS 1
 
 # include <stdio.h> // printf() funct
 # include <unistd.h> // for sleep funct
@@ -25,7 +25,8 @@
 
 typedef struct s_philo
 {
-	pthread_t *thread;
+	int index;
+	pthread_t thread;
 	
 } t_philo;
 

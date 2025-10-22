@@ -22,12 +22,12 @@ void *routine(void *arg)
 	philo_index = *(int *)arg;
 	printf("Philosofer %d\n", philo_index);
 	free(arg);
-	
+	return (NULL);
 }
 
 int main(int argc, char **argv)
 {
-	t_philo philos;
+	t_philo *philos;
 	int conv_philos_num;
 	int i;
 
@@ -36,23 +36,24 @@ int main(int argc, char **argv)
 	conv_philos_num = atoi(argv[1]);
 	if (conv_philos_num <= 0)
 		return(perror("Invalid number of philosophers.\n"), INVALID_PHILOS);
-	philos.thread = calloc(conv_philos_num, sizeof(pthread_t));
-	if (!philos.thread)
+	philos = calloc(conv_philos_num, sizeof(pthread_t));
+	if (!philos)
 		return (ALLOCATING_FAILED);
 	i = 0;
 	while(i < conv_philos_num)
 	{
-		if(pthread_create(philos.thread + i, NULL, &routine, i) != 0)
+		philos[i].index = i + 1;
+		if(pthread_create(&philos[i].thread, NULL, &routine, &philos[i]) != 0)
 			return (perror("Failed to create thread.\n"), FAILED_CREATING_THREADS);
 		i++;
 	}
 	i = 0;
 	while (i < conv_philos_num)
 	{
-		if (pthread_join(philos.thread[i], NULL) != 0)
+		if (pthread_join(philos[i].thread, NULL) != 0)
 			return (perror("Failed to join threads.\n"), FAILED_JOINING_THREADS);
-		printf("Thread %d has finished execution.\n");
-		i++;
+		printf("Thread %d has finished execution.\n", philos[i].index);
 	}
+	free(philos);
 	return (0);
 }
