@@ -17,18 +17,25 @@
 # define INVALID_PHILOS 1
 # define FAILED_CREATING_THREADS 1
 # define FAILED_JOINING_THREADS 1
+# define ERR_PHILOS_FUNCT 1
 
 # include <stdio.h> // printf() funct
 # include <unistd.h> // for sleep funct
 # include <pthread.h> // POSIX thread library
 # include <stdlib.h> // malloc, free funct
 
+typedef struct s_mutex
+{
+	pthread_mutex_t printing;
+} t_mutex;
+
 typedef struct s_philo
 {
 	int index;
 	pthread_t thread;
-	
+	t_mutex mutex;
 } t_philo;
+
 
 
 #endif

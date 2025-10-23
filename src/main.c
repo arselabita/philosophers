@@ -15,45 +15,60 @@
 // playing around with threads
 // how to create a thread? -> we are going to use 
 
-void *routine(void *arg)
+static void *start_routine(void *arg)
 {
-	int philo_index;
+	t_philo *philo;
 
-	philo_index = *(int *)arg;
-	printf("Philosofer %d\n", philo_index);
-	free(arg);
+	philo = (t_philo *)arg;
+	pthread_mutex_lock(&philo->mutex.printing);
+	printf("Philosofer %d\n", philo->index);
+	pthread_mutex_unlock(&philo->mutex.printing);
 	return (NULL);
 }
-
-int main(int argc, char **argv)
+static int philos_init_and_run(int argc, char **argv, t_philo **philos)
 {
-	t_philo *philos;
 	int conv_philos_num;
 	int i;
+	(void)argc;
+	t_philo *philo = *philos;
 
-	if (argc != 2)
-		return (EXIT_FAILURE);
 	conv_philos_num = atoi(argv[1]);
 	if (conv_philos_num <= 0)
 		return(perror("Invalid number of philosophers.\n"), INVALID_PHILOS);
-	philos = calloc(conv_philos_num, sizeof(pthread_t));
-	if (!philos)
-		return (ALLOCATING_FAILED);
+	philo = calloc(conv_philos_num, sizeof(t_philo));
+	if (!philo)
+		return (*philos = NULL, ALLOCATING_FAILED);
 	i = 0;
+	pthread_mutex_init(&philo->mutex.printing, NULL);
 	while(i < conv_philos_num)
 	{
-		philos[i].index = i + 1;
-		if(pthread_create(&philos[i].thread, NULL, &routine, &philos[i]) != 0)
+		philo[i].index = i + 1;
+		if(pthread_create(&philo[i].thread, NULL, &start_routine, &philo[i]) != 0)
 			return (perror("Failed to create thread.\n"), FAILED_CREATING_THREADS);
 		i++;
 	}
+	usleep(100);
 	i = 0;
 	while (i < conv_philos_num)
 	{
-		if (pthread_join(philos[i].thread, NULL) != 0)
+		if (pthread_join(philo[i].thread, NULL) != 0)
 			return (perror("Failed to join threads.\n"), FAILED_JOINING_THREADS);
-		printf("Thread %d has finished execution.\n", philos[i].index);
+		printf("Thread %d has finished execution.\n", philo[i].index);
+		i++;
 	}
+	return (0);
+}
+int main(int argc, char **argv)
+{
+	t_philo *philos;
+	int result;
+
+	if (argc != 2)
+		return (EXIT_FAILURE);
+	result = philos_init_and_run(argc, argv, &philos);
+	if (result != 0)
+		return (perror("The philos crashed boo.\n"), ERR_PHILOS_FUNCT);
+	pthread_mutex_destroy(&philos->mutex.printing);
 	free(philos);
 	return (0);
 }
