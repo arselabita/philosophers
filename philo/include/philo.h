@@ -35,6 +35,10 @@ typedef struct s_philo
 	int index;
 	pthread_t thread;
 	pthread_mutex_t printing;
+	int time_to_die;
+	int time_to_eat;
+	int time_to_sleep;
+	int number_of_times_each_philosopher_must_eat;
 } t_philo;
 
 void	*ft_calloc(size_t count, size_t size);
