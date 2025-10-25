@@ -15,10 +15,22 @@
 // playing around with threads
 // how to create a thread? -> we are going to use 
 
+int getmillisec()
+{
+	struct timeval tv;
+	if (gettimeofday(&tv, NULL) == -1)
+		return (perror("Failed to give time of day.\n"), ERRNO_GET_TIME);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	// Convering to seconds to milliseconds and microseconds too
+}
+
 static void *start_routine(void *arg)
 {
 	t_philo *philo;
+	int millisec;
 
+	millisec = getmillisec();
+	printf("%d ", millisec);
 	philo = (t_philo *)arg;
 	pthread_mutex_lock(&philo->printing);
 	printf("Philosofer %d\n", philo->index);
@@ -31,7 +43,7 @@ int main(int argc, char **argv)
 	t_philo *philos;
 	int convert_to_number;
 	int i;
- 
+
 	if (argc != 2)
 		return (EXIT_FAILURE);
 	if ((convert_to_number = ft_atoi(argv[1])) <= 0)

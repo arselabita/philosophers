@@ -17,13 +17,16 @@
 # define FAILED_CREATING_THREADS 1
 # define FAILED_JOINING_THREADS 1
 # define ERR_PHILOS_FUNCT 1
+# define ERRNO_GET_TIME 1
+
 
 # include <stdio.h> // printf() funct
 # include <unistd.h> // for sleep funct
 # include <pthread.h> // POSIX thread library
 # include <stdlib.h> // malloc, free funct
 # include <limits.h> // size_t, INT_MAX, INT_MIN
-#include <stdint.h> // SIZE_MAX
+# include <stdint.h> // SIZE_MAX
+# include <sys/time.h> // gettimeofday
 
 typedef struct s_mutex
 {
