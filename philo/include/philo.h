@@ -20,6 +20,8 @@
 # define ERR_GET_TIME 1
 # define ERR_PARSING 1
 
+# define RED "\033[31m"
+
 # include <stdio.h> // printf() funct
 # include <unistd.h> // for sleep funct
 # include <pthread.h> // POSIX thread library
@@ -75,8 +77,7 @@ long long	ft_atol(const char *nptr);
 void	ft_bzero(void *s, size_t n);
 int 	parse_arguments(int argc, char **argv, t_data *data);
 void 	init_run_thread(t_data data, t_philo *philo);
-char	**ft_split(char const *s, char c);
-void	free_split(char **array);
 int		ft_valid_number(char *str);
+void	print_error(const char *msg);
 
 #endif

@@ -64,18 +64,7 @@ void	ft_bzero(void *s, size_t n)
 		i++;
 	}
 }
-void	free_split(char **array)
-{
-	int	i;
 
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-}
 int	ft_valid_number(char *str)
 {
 	int	i;
@@ -94,4 +83,20 @@ int	ft_valid_number(char *str)
 		i++;
 	}
 	return (EXIT_SUCCESS);
+}
+
+size_t ft_strlen(const char *str)
+{
+	size_t i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return(i);
+}
+void print_error(const char *msg)
+{
+	write(STDERR_FILENO, RED, 1);
+	write(STDERR_FILENO, msg, ft_strlen(msg));
+	write(STDERR_FILENO, RED, 1);
 }

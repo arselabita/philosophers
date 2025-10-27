@@ -22,9 +22,7 @@ int main(int argc, char **argv)
 	if (argc < 5 || argc > 6)
 	{
 		write(STDERR_FILENO, "Error: Invalid number of arguments.\n", 36);
-		write(STDERR_FILENO, "Usage: ./philo [number_of_philosophers], \
-			[time_to_die], [time_to_eat], [time_to_sleep], \
-			[number_of_times_each_philosopher_must_eat]\n", 138);
+		write(STDERR_FILENO, "Usage: ./philo [number_of_philosophers] [time_to_die] [time_to_eat] [time_to_sleep] [number_of_times_each_philosopher_must_eat]\n", 128);
 		return (EXIT_FAILURE);
 	}
 	if (parse_arguments(argc, argv, &data) != EXIT_SUCCESS)

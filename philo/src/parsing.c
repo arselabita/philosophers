@@ -12,49 +12,20 @@
 
 #include "../include/philo.h"
 
-static int	arg_count(int argc, char **argv)
-{
-	int		i;
-	int		j;
-	int		count;
-	char	**split;
-
-	i = 1;
-	count = 0;
-	while (i < argc)
-	{
-		split = ft_split(argv[i], ' ');
-		if (!split)
-		{
-			perror("arg_count: memory allocation failed during split.\n");
-			return (EXIT_FAILURE);
-		}	
-		j = 0;
-		while (split[j])
-		{
-			count++;
-			j++;
-		}
-		free_split(split);
-		i++;
-	}
-	return (count);
-}
-
 static int	parsing_helper(char *nums, int *number)
 {
 	long	value;
 
 	if (ft_valid_number(nums) == EXIT_FAILURE)
 	{
-		perror("parsing_helper: Invalid numeric value.\n");
+		print_error("parsing_helper: Invalid numeric value.\n");
 		return (EXIT_FAILURE);
 	}
 		
 	value = ft_atol(nums);
 	if (value < INT_MIN || value > INT_MAX)
 	{
-		perror("parsing_helper: integer overflow or underflow.\n");
+		write(STDERR_FILENO, "parsing_helper: integer overflow or underflow.\n", 47);
 		return (EXIT_FAILURE);
 	}
 	*number = (int)value;
@@ -64,44 +35,39 @@ static int	parsing_helper(char *nums, int *number)
 int	parse_arguments(int argc, char **argv, t_data *data)
 {
 	int		i;
-	int		j;
 	int		number;
-	char	**nums;
-	int		argument_count;
 
-	argument_count = arg_count(argc, argv);
-	if (argument_count == 0)
-		return (write(2, "ERROR\n", 6), 1);
 	i = 1;
 	while (i < argc)
 	{
-		nums = ft_split(argv[i], ' ');
-		if (!nums)
-			return (perror("parse_arguments: split failed.\n"), EXIT_FAILURE);
-		j = 0;
-		while (nums[j])
-		{
-			if (parsing_helper(nums[j], &number))
-				return (free_split(nums), EXIT_FAILURE);
-			j++;
-		}
-		if (i == 1)
-			data->num_of_philos = number;
-		else if(i == 2)
-			data->time.time_to_die = number;
-		else if(i == 3)
-			data->time.time_to_eat = number;
-		else if(i == 4)
-			data->time.time_to_sleep = number;
-		else if(i == 5)
-			data->number_of_times_each_philosopher_must_eat = number;
-		free_split(nums);
+		if (parsing_helper(argv[1], &number))
+			return (EXIT_FAILURE);
+		data->num_of_philos = number;
+		if (parsing_helper(argv[2], &number))
+			return (EXIT_FAILURE);
+		data->time.time_to_die = number;
+		if (parsing_helper(argv[3], &number))
+			return (EXIT_FAILURE);
+		data->time.time_to_eat = number;
+		if (parsing_helper(argv[4], &number))
+			return (EXIT_FAILURE);
+		data->time.time_to_sleep = number;
 		i++;
 	}
-	if (argc == 5)
+	if (argc == 6)
+	{
+		if (parsing_helper(argv[5], &number))
+			return (EXIT_FAILURE);
+		data->number_of_times_each_philosopher_must_eat = number;
+	}
+	else
 		data->number_of_times_each_philosopher_must_eat = -1;
-	printf ("num of philos: %d\n time to die: %d\n time to eat: %d\n \
-			time to sleep: %d\n num of times ph eat: %d\n", data->num_of_philos, data->time.time_to_die, data->time.time_to_eat, data->time.time_to_sleep, data->number_of_times_each_philosopher_must_eat);
+
+	printf("**********DEBUGING*************\n");
+	printf (" num of philos: %d\n time to die: %d\n time to eat: %d\n time to sleep: %d\n num of times ph eat: %d\n", data->num_of_philos, data->time.time_to_die, data->time.time_to_eat, data->time.time_to_sleep, data->number_of_times_each_philosopher_must_eat);
+	printf("*******************************\n");
+	
+	
 	if (data->num_of_philos <= 0 || data->time.time_to_die <= 0 \
 		|| data->time.time_to_eat <= 0 || data->time.time_to_sleep <= 0)
 		{
