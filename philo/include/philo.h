@@ -6,19 +6,19 @@
 /*   By: abita <abita@student.42vienna.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 14:45:02 by abita             #+#    #+#             */
-/*   Updated: 2025/10/14 14:45:05 by abita            ###   ########.fr       */
+/*   Updated: 2025/10/27 11:37:03 by abita            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOS_H
 # define PHILOS_H
-# define ALLOCATING_FAILED 1
+# define ERR_ALLOCATING 1
 # define INVALID_PHILOS 1
-# define FAILED_CREATING_THREADS 1
-# define FAILED_JOINING_THREADS 1
+# define ERR_CREATING_THREADS 1
+# define ERR_JOINING_THREADS 1
 # define ERR_PHILOS_FUNCT 1
-# define ERRNO_GET_TIME 1
-
+# define ERR_GET_TIME 1
+# define ERR_PARSING 1
 
 # include <stdio.h> // printf() funct
 # include <unistd.h> // for sleep funct
@@ -28,24 +28,55 @@
 # include <stdint.h> // SIZE_MAX
 # include <sys/time.h> // gettimeofday
 
+typedef struct s_data t_data;
+typedef struct s_time t_time;
+typedef struct s_mutex t_mutex;
+typedef struct s_philo t_philo;
+
+// time related values in here
+typedef struct s_time
+{
+	int start_time;
+	int time_to_die;
+	int time_to_eat;
+	int time_to_sleep;
+} t_time;
+
+// all global simulation settings
+typedef struct s_data
+{
+	int num_of_philos;
+	int number_of_times_each_philosopher_must_eat;
+	t_time time;
+} t_data;
+
+// struct for mutexes
 typedef struct s_mutex
 {
 	pthread_mutex_t printing;
 } t_mutex;
 
+// and the philo struct
 typedef struct s_philo
 {
-	int index;
-	pthread_t thread;
-	pthread_mutex_t printing;
-	int time_to_die;
-	int time_to_eat;
-	int time_to_sleep;
-	int number_of_times_each_philosopher_must_eat;
+	pthread_t philo_thread;
+	int philo_id;
+
+	t_time time;
+	t_mutex mutex;
+	t_data *data;
+
 } t_philo;
 
+
+
 void	*ft_calloc(size_t count, size_t size);
-int		ft_atoi(const char *nptr);
+long long	ft_atol(const char *nptr);
 void	ft_bzero(void *s, size_t n);
+int 	parse_arguments(int argc, char **argv, t_data *data);
+void 	init_run_thread(t_data data, t_philo *philo);
+char	**ft_split(char const *s, char c);
+void	free_split(char **array);
+int		ft_valid_number(char *str);
 
 #endif
