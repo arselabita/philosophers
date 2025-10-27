@@ -20,8 +20,6 @@
 # define ERR_GET_TIME 1
 # define ERR_PARSING 1
 
-# define RED "\033[31m"
-
 # include <stdio.h> // printf() funct
 # include <unistd.h> // for sleep funct
 # include <pthread.h> // POSIX thread library

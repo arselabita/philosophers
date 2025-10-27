@@ -25,7 +25,7 @@ static int	parsing_helper(char *nums, int *number)
 	value = ft_atol(nums);
 	if (value < INT_MIN || value > INT_MAX)
 	{
-		write(STDERR_FILENO, "parsing_helper: integer overflow or underflow.\n", 47);
+		print_error("parsing_helper: integer overflow or underflow.\n");
 		return (EXIT_FAILURE);
 	}
 	*number = (int)value;
@@ -71,12 +71,12 @@ int	parse_arguments(int argc, char **argv, t_data *data)
 	if (data->num_of_philos <= 0 || data->time.time_to_die <= 0 \
 		|| data->time.time_to_eat <= 0 || data->time.time_to_sleep <= 0)
 		{
-			write(STDERR_FILENO, "Error: All arguments must be greater than 0.\n", 45);
+			print_error("Error: All arguments must be greater than 0.\n");
 			return (EXIT_FAILURE);
 		}
 	if (argc == 6 && data->number_of_times_each_philosopher_must_eat <= 0)
 	{
-		write(STDERR_FILENO, "Error: number_of_times_each_philosopher_must_eat must be > than 0.\n", 45);
+		print_error("Error: number_of_times_each_philosopher_must_eat must be > than 0.\n");
 		return (EXIT_FAILURE);
 	}		
 	return (EXIT_SUCCESS);

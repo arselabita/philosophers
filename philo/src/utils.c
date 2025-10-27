@@ -96,7 +96,7 @@ size_t ft_strlen(const char *str)
 }
 void print_error(const char *msg)
 {
-	write(STDERR_FILENO, RED, 1);
+	write(STDERR_FILENO, "\033[31m", 5);
 	write(STDERR_FILENO, msg, ft_strlen(msg));
-	write(STDERR_FILENO, RED, 1);
+	write(STDERR_FILENO, "\033[31m", 5);
 }
