@@ -47,13 +47,16 @@ typedef struct s_data
 {
 	int num_of_philos;
 	int number_of_times_each_philosopher_must_eat;
+	pthread_mutex_t printing;
 	t_time time;
 } t_data;
 
 // struct for mutexes
 typedef struct s_mutex
 {
-	pthread_mutex_t printing;
+	pthread_mutex_t right_fork;
+	pthread_mutex_t left_fork;
+	
 } t_mutex;
 
 // and the philo struct
@@ -61,20 +64,17 @@ typedef struct s_philo
 {
 	pthread_t philo_thread;
 	int philo_id;
-
 	t_time time;
 	t_mutex mutex;
 	t_data *data;
 
 } t_philo;
 
-
-
 void	*ft_calloc(size_t count, size_t size);
 long long	ft_atol(const char *nptr);
 void	ft_bzero(void *s, size_t n);
 int 	parse_arguments(int argc, char **argv, t_data *data);
-void 	init_run_thread(t_data data, t_philo *philo);
+void 	init_run_thread(t_data *data, t_philo *philo);
 int		ft_valid_number(char *str);
 void	print_error(const char *msg);
 

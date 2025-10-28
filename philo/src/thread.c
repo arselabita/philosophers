@@ -10,16 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/* #include "../include/philo.h"
+#include "../include/philo.h"
 
-static int getmillisec()
+/* static int getmillisec()
 {
 	struct timeval tv;
 	if (gettimeofday(&tv, NULL) == -1)
 		return (perror("Failed to give time of day.\n"), ERR_GET_TIME);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 	// Convering seconds to milliseconds and microseconds too
-}
+}*/
 
 static void *start_routine(void *arg)
 {
@@ -43,6 +43,7 @@ static void *start_routine(void *arg)
 	
 	return (NULL);
 }
+/*
 static void run_threads(t_data data, t_philo *philo)
 {
 	int i;
@@ -63,17 +64,20 @@ static void free_destroy(t_philo *philo)
 	while (i < data)
 	pthread_mutex_destroy(&philo->printing);
 	free(philo);
-}
-void init_run_thread(t_data *data, t_philo *philo)
+} */
+void init_run_thread(t_data *data, t_philo **philo)
 {
 	int i;
 
+	*philo = ft_calloc(data->num_of_philos, sizeof(t_philo));
+	if (!*philo)
+		return (ERR_ALLOCATING);
 	i = 0;
-	pthread_mutex_init(&philo->printing, NULL);
-	while (i < data->conv_to_num)
+	pthread_mutex_init(&data->printing, NULL);
+	while (i < data->num_of_philos)
 	{
-		philo[i].philo_id = i + 1;
-		if(pthread_create(&philo[i].thread, NULL, &start_routine, &philo[i]) != 0)
+		(*philo)[i].philo_id = i + 1;
+		if(pthread_create(&(*philo)[i].philo_thread, NULL, &start_routine, &(*philo)[i]) != 0)
 			return (perror("Failed to create thread.\n"), ERR_CREATING_THREADS);
 		usleep(100);
 		i++;
@@ -81,5 +85,5 @@ void init_run_thread(t_data *data, t_philo *philo)
 	run_threads(data, philo);
 	free_destroy(philo);
 	return (0);
-} */
+}
 

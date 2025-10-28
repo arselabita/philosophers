@@ -18,7 +18,9 @@
 int main(int argc, char **argv)
 {
 	t_data  data;
+	t_philo *philo;
 
+	philo = NULL;
 	if (argc < 5 || argc > 6)
 	{
 		print_error("Error: Invalid number of arguments.\n");
@@ -30,6 +32,6 @@ int main(int argc, char **argv)
 		print_error("Error: Failed to parse arguments.\n");
 		return (ERR_PARSING);
 	}
-	//init_run_thread(&data, philo);
+	init_run_thread(&data, &philo);
 	return (EXIT_SUCCESS);
 }
