@@ -12,7 +12,7 @@
 
 #include "../include/philo.h"
 
-static int	parsing_helper(char *nums, int *number)
+static int	parsing_helper(char *nums, int *number) // check for overflowing
 {
 	long	value;
 
@@ -21,7 +21,6 @@ static int	parsing_helper(char *nums, int *number)
 		print_error("parsing_helper: Invalid numeric value.\n");
 		return (EXIT_FAILURE);
 	}
-		
 	value = ft_atol(nums);
 	if (value < INT_MIN || value > INT_MAX)
 	{
@@ -42,9 +41,11 @@ int arg_check(int argc, char **argv, int number, t_data *data)
 	}
 	else
 		data->number_of_times_each_philosopher_must_eat = -1;
+	
 	printf("\n**********DEBUGING*************\n");
 	printf (" num of philos: %d\n time to die: %d\n time to eat: %d\n time to sleep: %d\n num of times ph eat: %d\n", data->num_of_philos, data->time.time_to_die, data->time.time_to_eat, data->time.time_to_sleep, data->number_of_times_each_philosopher_must_eat);
 	printf("*******************************\n");
+	
 	if (data->num_of_philos <= 0 || data->time.time_to_die <= 0 \
 		|| data->time.time_to_eat <= 0 || data->time.time_to_sleep <= 0)
 		{

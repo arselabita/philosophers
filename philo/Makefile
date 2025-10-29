@@ -27,7 +27,7 @@ OBJ_DIR = build
 SRCS = $(SRC_DIR)/main.c \
 	   $(SRC_DIR)/parsing.c \
 	   $(SRC_DIR)/utils.c \
-	   #$(SRC_DIR)/thread.c
+	   $(SRC_DIR)/thread.c
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

@@ -32,6 +32,10 @@ int main(int argc, char **argv)
 		print_error("Error: Failed to parse arguments.\n");
 		return (ERR_PARSING);
 	}
-	init_run_thread(&data, &philo);
+	if (init_run_thread(&data, &philo) != EXIT_SUCCESS)
+	{
+		print_error("Error: Failed to initialize philos.\n");
+		return (INVALID_PHILOS);	
+	}
 	return (EXIT_SUCCESS);
 }
