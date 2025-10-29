@@ -34,10 +34,10 @@ static void *start_routine(void *arg)
 	printf("%d Philosofer %d\n", millisec, philo->philo_id);
 	pthread_mutex_unlock(&data->printing);
 
-	printf("Philosopher %d is thinking.\n", philo->philo_id);
-	printf("Philosopher %d has taken a fork.\n", philo->philo_id);
-	printf("Philosopher %d is eating.\n", philo->philo_id);
-	printf("Philosopher %d has finished.\n", philo->philo_id);
+	printf("%d Philosofer %d is thinking.\n",millisec, philo->philo_id);
+	printf("%d Philosofer %d has taken a fork.\n", millisec, philo->philo_id);
+	printf("%d Philosofer %d is eating.\n", millisec, philo->philo_id);
+	printf("%d Philosofer %d has finished.\n", millisec, philo->philo_id);
 	
 	return (NULL);
 }
