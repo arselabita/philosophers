@@ -12,32 +12,18 @@
 
 #include "../include/philo.h"
 
-static int getmillisec()
-{
-	struct timeval tv;
-	if (gettimeofday(&tv, NULL) == -1)
-		return (perror("Failed to give time of day.\n"), ERR_GET_TIME);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-	// Convering seconds to milliseconds and microseconds too
-}
-
 static void *start_routine(void *arg)
 {
 	t_philo *philo;
-	t_data *data;
-	int millisec;
 
-	millisec = getmillisec();
 	philo = (t_philo *)arg;
-	data = philo->data;
-	pthread_mutex_lock(&data->printing);
-	printf("%d Philosofer %d\n", millisec, philo->philo_id);
-	pthread_mutex_unlock(&data->printing);
+	print_msg(philo, "is thinking");
+	usleep(500 * 1000);
 
-	printf("%d Philosofer %d is thinking.\n",millisec, philo->philo_id);
-	printf("%d Philosofer %d has taken a fork.\n", millisec, philo->philo_id);
-	printf("%d Philosofer %d is eating.\n", millisec, philo->philo_id);
-	printf("%d Philosofer %d has finished.\n", millisec, philo->philo_id);
+	// printf("%d Philosofer %d is thinking.\n",millisec, philo->philo_id);
+	// printf("%d Philosofer %d has taken a fork.\n", millisec, philo->philo_id);
+	// printf("%d Philosofer %d is eating.\n", millisec, philo->philo_id);
+	// printf("%d Philosofer %d has finished.\n", millisec, philo->philo_id);
 	
 	return (NULL);
 }
@@ -50,13 +36,12 @@ int init_run_thread(t_data *data, t_philo **philo)
 	if (!*philo)
 		return (ERR_ALLOCATING);
 	i = 0;
-	pthread_mutex_init(&data->printing, NULL);
 	while (i < data->num_of_philos)
 	{
 		(*philo)[i].philo_id = i + 1;
 		(*philo)[i].data = data;
 		if(pthread_create(&(*philo)[i].philo_thread, NULL, &start_routine, &(*philo)[i]) != 0)
-			return (perror("Failed to create thread.\n"), ERR_CREATING_THREADS);
+			return (print_error("Failed to create thread.\n"), ERR_CREATING_THREADS);
 		usleep(100);
 		i++;
 	}
@@ -64,7 +49,7 @@ int init_run_thread(t_data *data, t_philo **philo)
 	while (i < data->num_of_philos)
 	{
 		if (pthread_join((*philo)[i].philo_thread, NULL) != 0) // waits for all threads to finish
-			return (perror("Failed to join threads.\n"), ERR_JOINING_THREADS);
+			return (print_error("Failed to join threads.\n"), ERR_JOINING_THREADS);
 		printf("Thread %d has finished execution.\n", (*philo)[i].philo_id);
 		i++;
 	}

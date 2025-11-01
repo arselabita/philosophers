@@ -35,6 +35,8 @@ int main(int argc, char **argv)
 		print_error("Error: Failed to parse arguments.\n");
 		return (ERR_PARSING);
 	}
+	pthread_mutex_init(&data.printing, NULL);
+	data.start_time = getmillisec();
 	if (init_run_thread(&data, &philo) != EXIT_SUCCESS)
 	{
 		print_error("Error: Failed to initialize philos.\n");

@@ -100,3 +100,13 @@ void print_error(const char *msg)
 	write(STDERR_FILENO, msg, ft_strlen(msg));
 	write(STDERR_FILENO, "\033[31m", 5);
 }
+
+void print_msg(t_philo *philo, char *msg)
+{
+	t_data *data;
+
+	data = philo->data;
+	pthread_mutex_lock(&data->printing);
+	printf("%ld %d %s\n", calc_time(data), philo->philo_id, msg);
+	pthread_mutex_unlock(&data->printing);
+}

@@ -35,7 +35,6 @@ typedef struct s_philo t_philo;
 // time related values in here
 typedef struct s_time
 {
-	int start_time;
 	int time_to_die;
 	int time_to_eat;
 	int time_to_sleep;
@@ -46,6 +45,7 @@ typedef struct s_data
 {
 	int num_of_philos;
 	int number_of_times_each_philosopher_must_eat;
+	long start_time;
 	pthread_mutex_t printing;
 	pthread_mutex_t *fork;
 	t_time time;
@@ -68,6 +68,7 @@ long long	ft_atol(const char *nptr);
 void	ft_bzero(void *s, size_t n);
 int		ft_valid_number(char *str);
 void	print_error(const char *msg);
+void 	print_msg(t_philo *philo, char *msg);
 
 // parsing
 int 	parse_arguments(int argc, char **argv, t_data *data);
@@ -75,5 +76,8 @@ int 	parse_arguments(int argc, char **argv, t_data *data);
 // simulation
 int 	init_run_thread(t_data *data, t_philo **philo);
 
+// time
+long getmillisec();
+long 	calc_time(t_data *data);
 
 #endif
