@@ -12,8 +12,11 @@
 
 #include "../include/philo.h"
 
-// playing around with threads
-// how to create a thread? -> we are going to use 
+/////////////////////
+// the dining philosophers problem is an example problem 
+// often used in concurrent algorithm design to illustrate synchronization 
+// issues and techniques for resolving them.
+/////////////////////
 
 int main(int argc, char **argv)
 {

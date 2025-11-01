@@ -1,0 +1,59 @@
+                            -----------------------------------------------
+                                        The Dining Philosophers
+                            -----------------------------------------------
+
+    The dining philosophers problem is an example problem often used in concurrent algorithm design to 
+                illustrate synchronization issues and techniques for resolving them.
+
+
+Problem statement:
+
+Five philosophers dine together at the same table. Each philosopher has their own plate at the table. 
+There is a fork between each pair of adjacent plates. The dish served is a kind of spaghetti which has to be eaten with two forks. 
+Each philosopher can only alternately think and eat. Moreover, a philosopher can only eat their spaghetti 
+when they have both a left and right fork.
+
+Thus two forks will only be available when their two nearest neighbors are thinking, not eating. 
+After an individual philosopher finishes eating, they will put down both forks. 
+The problem is how to design a regimen (a concurrent algorithm) such that any philosopher will not starve; 
+    i.e., each can forever continue to alternate between eating and thinking, 
+      assuming that no philosopher can know when others may want to eat or think 
+      (an issue of incomplete information).
+
+
+Problems:
+
+The problem was designed to illustrate the challenges of avoiding deadlock, a system state in which no progress is possible.
+            What are deadlocks???
+                -> In concurrent computing, deadlock is any situation in which no member of some group of entities can 
+                   proceed because each waits for another member, including itself, to take action, such as 
+                   sending a message or, more commonly, releasing a lock.
+                More simple:
+                    -> deadlock: the situation when each of at least two tasks is waiting for a lock 
+                       that the other task holds. Unless something is done, the two tasks will wait forever.
+                
+                Releasing a lock?????????
+                    -> a lock or mutex (from mutual exclusion) is a synchronization primitive that 
+                       prevents state from being modified or accessed by multiple threads of execution at once.
+                    -> Careless use of locks can result in deadlock or livelock.
+
+A proposal in which each philosopher is instructed to behave as follows:
+
+        a. think unless the left fork is available; when it is, pick it up;
+        b. think unless the right fork is available; when it is, pick it up;
+        c. when both forks are held, eat for a fixed amount of time;
+        d. put the left fork down;
+        e. put the right fork down;
+        f. repeat from the beginning.
+
+Data Races (Race Conditions) — What Are They?
+    -> Data races are a common problem in multithreaded programming. 
+       Data races occur when multiple tasks or threads access a shared resource without sufficient protections, 
+       leading to undefined or unpredictable behavior.
+
+
+
+
+Sources:
+https://en.wikipedia.org/wiki/Dining_philosophers_problem
+
