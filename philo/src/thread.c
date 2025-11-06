@@ -17,8 +17,14 @@ static void *start_routine(void *arg)
 	t_philo *philo;
 
 	philo = (t_philo *)arg;
+
+	// syncronize... if any pthreadcreate failed return NULL
+
 	print_msg(philo, "is thinking");
 	usleep(500 * 1000);
+	
+	// calling a function for even philos
+	philo_routine(philo);
 
 	// printf("%d Philosofer %d is thinking.\n",millisec, philo->philo_id);
 	// printf("%d Philosofer %d has taken a fork.\n", millisec, philo->philo_id);
