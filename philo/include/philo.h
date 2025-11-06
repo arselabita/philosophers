@@ -75,6 +75,7 @@ int 	parse_arguments(int argc, char **argv, t_data *data);
 
 // simulation
 int 	init_run_thread(t_data *data, t_philo **philo);
+int philo_routine(t_philo *philo);
 
 // time
 long getmillisec();
