@@ -56,6 +56,7 @@ typedef struct s_philo
 {
 	pthread_t philo_thread;
 	int philo_id;
+	int not_dead;
 	pthread_mutex_t *right_fork;
 	pthread_mutex_t *left_fork;
 	t_data *data;
@@ -75,10 +76,10 @@ int 	parse_arguments(int argc, char **argv, t_data *data);
 
 // simulation
 int 	init_run_thread(t_data *data, t_philo **philo);
-int philo_routine(t_philo *philo);
+int		philo_monitoring(t_philo *philo);
 
 // time
-long getmillisec();
+long	getmillisec();
 long 	calc_time(t_data *data);
 
 #endif

@@ -20,11 +20,16 @@ static void *start_routine(void *arg)
 
 	// syncronize... if any pthreadcreate failed return NULL
 
-	print_msg(philo, "is thinking");
-	usleep(500 * 1000);
+	// print_msg(philo, "is thinking");
+	// usleep(500 * 1000);
 	
 	// calling a function for even philos
-	philo_routine(philo);
+	philo->not_dead = 0
+	while (!philo->not_dead)
+	{
+		philo_monitoring(philo);
+	}
+		
 
 	// printf("%d Philosofer %d is thinking.\n",millisec, philo->philo_id);
 	// printf("%d Philosofer %d has taken a fork.\n", millisec, philo->philo_id);
@@ -59,6 +64,9 @@ int init_run_thread(t_data *data, t_philo **philo)
 		printf("Thread %d has finished execution.\n", (*philo)[i].philo_id);
 		i++;
 	}
+	i = 0;
+	while (i < data->num_of_philos)
+		pthread_mutex_destroy(&data->fork[i++]);
 	pthread_mutex_destroy(&data->printing);
 	free(*philo);
 	return (EXIT_SUCCESS);

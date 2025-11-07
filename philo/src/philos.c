@@ -12,28 +12,58 @@
 
 #include "../include/philo.h"
 
+/////////////////////
+// Fork Acquisition Order:
+// 
+//	For Example:
+//		Even-ID: 
+//			Philosophers (P0, P2): Pick up the left fork first, then the right fork.
+//		Odd-ID:
+//			Philosophers (P1, P3): Pick up the right fork first, then the left fork.
+/////////////////////
+
 // static int philo_routine_even(t_philo *philo)
 // {
 // 	if (philo->data->num_of_philos % 2 == 0)
 // 	{
-		 
+
 // 	}
 // 	return (EXIT_SUCCESS);
 // }
 
-int philo_routine(t_philo *philo)
+int philo_monitoring(t_philo *philo)
 {
-	philo->left_fork = &philo->data->fork[((philo->philo_id - 1 + philo->data->num_of_philos) % philo->data->num_of_philos)];
-	philo->right_fork = &philo->data->fork[((philo->philo_id + 1) % philo->data->num_of_philos)];
 
-	printf("\n**********DEBUGING*************\n");
-	printf ("left fork: %d\n", (philo->philo_id - 1 + philo->data->num_of_philos) % philo->data->num_of_philos);
-	printf ("right fork: %d\n", (philo->philo_id + 1) % philo->data->num_of_philos);
-	printf("*******************************\n");
+	
+	philo->left_fork = &philo->data->fork[(philo->philo_id - 1)];
+	philo->right_fork = &philo->data->fork[(philo->philo_id % philo->data->num_of_philos)];
+
+	// printf("\n**********DEBUGING*************\n");
+	// printf ("left fork: %d\n", (philo->philo_id - 1 + philo->data->num_of_philos) % philo->data->num_of_philos);
+	// printf ("right fork: %d\n", (philo->philo_id + 1) % philo->data->num_of_philos);
+	// printf("*******************************\n");
+	if (philo->philo_id % 2 == 0)
+	{
+		pthread_mutex_lock(philo->left_fork);
+		pthread_mutex_lock(philo->right_fork);
+	}
+	else
+	{
+		pthread_mutex_lock(philo->right_fork);
+		pthread_mutex_lock(philo->left_fork);
+	}
+	print_msg(philo, "is eating");
+	usleep(philo->data->time.time_to_eat * 1000);
+
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
+
+	print_msg(philo, "is sleeping");
+	usleep(philo->data->time.time_to_sleep * 1000);
+
+	print_msg(philo, "is thinking");
 
 	// if (philo_routine_even(philo) != EXIT_SUCCESS)
 	// 	return (print_error("Failed at routine philo even.\n"), EXIT_FAILURE);
-	
-
 	return (EXIT_SUCCESS);
 }
