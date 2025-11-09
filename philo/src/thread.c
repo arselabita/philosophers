@@ -17,17 +17,11 @@ static void	*start_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	
 	/////////
 	// syncronize... if any pthread_create failed return NULL
 	////////
-
 	// calling a function for even and odd philos routine
-	philo->not_dead = 0;
-	while (!philo->not_dead)
-	{
-		philo_routine(philo);
-	}
+	philo_routine(philo); // here i do sleeping, eating, thinking
 	return (NULL);
 }
 
@@ -61,11 +55,8 @@ int	init_run_thread(t_data *data, t_philo **philo)
 	}
 	i = 0;
 	while (i < data->num_of_philos)
-	{
 		pthread_mutex_destroy(&data->fork[i++]);
-		free((*philo)->data->fork);
-	}
-		
+	free((*philo)->data->fork);
 	pthread_mutex_destroy(&data->printing);
 	free(*philo);
 	return (EXIT_SUCCESS);
