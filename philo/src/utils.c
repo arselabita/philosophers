@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../include/philo.h"
+#include "../include/philo.h"
 
 long long	ft_atol(const char *nptr)
 {
 	long long	num;
-	int		minus;
-	int		i;
+	int			minus;
+	int			i;
 
 	minus = 1;
 	num = 0;
@@ -85,28 +85,54 @@ int	ft_valid_number(char *str)
 	return (EXIT_SUCCESS);
 }
 
-size_t ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (str[i])
 		i++;
-	return(i);
+	return (i);
 }
-void print_error(const char *msg)
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (0);
+}
+
+void	print_error(const char *msg)
 {
 	write(STDERR_FILENO, "\033[31m", 5);
 	write(STDERR_FILENO, msg, ft_strlen(msg));
-	write(STDERR_FILENO, "\033[31m", 5);
+	write(STDERR_FILENO, "\033[0m", 5);
 }
 
-void print_msg(t_philo *philo, char *msg)
+void	print_msg(t_philo *philo, char *msg)
 {
-	t_data *data;
+	t_data	*data;
+	char	*color;
 
 	data = philo->data;
+	color = RESET_COLOR;
+	if (ft_strcmp(msg, "is eating") == 0)
+		color = GREEN;
+	else if (ft_strcmp(msg, "is sleeping") == 0)
+		color = BLUE;
+	else if (ft_strcmp(msg, "is thinking") == 0)
+		color = YELLOW;
+	else if (ft_strcmp(msg, "has taken a fork") == 0)
+		color = CYAN; // cyan
+	else if (ft_strcmp(msg, "died") == 0)
+		color = RED; // red
 	pthread_mutex_lock(&data->printing);
-	printf("%ld %d %s\n", calc_time(data), philo->philo_id, msg);
+	printf("%s[%ld ms] %d %s\033[0m\n", color, calc_time(data), philo->philo_id, msg);
 	pthread_mutex_unlock(&data->printing);
 }
