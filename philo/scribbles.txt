@@ -83,6 +83,18 @@ Use enums when you have values that you know aren't going to change,
 *****
 
 
+
+Plan:
+
+Day	 |  Focus	Goal
+--------------------------------------------------------------------------------------
+Day 1	 |  Odd philosopher routine + fork order fix	Make 2, 4, 6 behave correctly
+Day 2	 |  Add looping behavior + break condition	Philosophers loop until a flag
+Day 3	 |  Implement death monitoring thread	Detect time_to_die violation
+Day 4	 |  Implement meal counter + stop logic	Simulation stops when all ate enough
+Day 5	 |  Testing, edge cases, cleanup	Handle 1 philosopher, small times, etc.
+---------------------------------------------------------------------------------------
+
 Sources:
 https://en.wikipedia.org/wiki/Dining_philosophers_problem
 

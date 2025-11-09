@@ -38,6 +38,10 @@ int	main(int argc, char **argv)
 		return (print_error("Error: Failed to parse arguments.\n"),
 			ERR_PARSING);
 	pthread_mutex_init(&data.printing, NULL);
+	data.fork = ft_calloc(data.num_of_philos,
+			sizeof(pthread_mutex_t));
+	if (!data.fork)
+		return (ERR_ALLOCATING);
 	data.start_time = getmillisec();
 	result = init_run_thread(&data, &philo);
 	if (result != SUCCESS)

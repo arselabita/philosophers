@@ -12,7 +12,7 @@
 
 #include "../include/philo.h"
 
-static void	*start_routine(void *arg)
+static void	*philo_thread_start(void *arg)
 {
 	t_philo	*philo;
 
@@ -21,7 +21,8 @@ static void	*start_routine(void *arg)
 	// syncronize... if any pthread_create failed return NULL
 	////////
 	// calling a function for even and odd philos routine
-	philo_routine(philo); // here i do sleeping, eating, thinking
+	//usleep(400);
+	run_philo_thread(philo); // here i do sleeping, eating, thinking
 	return (NULL);
 }
 
@@ -37,7 +38,7 @@ int	init_run_thread(t_data *data, t_philo **philo)
 	{
 		(*philo)[i].philo_id = i + 1;
 		(*philo)[i].data = data;
-		if (pthread_create(&(*philo)[i].philo_thread, NULL, &start_routine,
+		if (pthread_create(&(*philo)[i].philo_thread, NULL, &philo_thread_start,
 				&(*philo)[i]) != 0)
 			return (print_error("Failed to create thread.\n"),
 				ERR_CREATING_THREADS);

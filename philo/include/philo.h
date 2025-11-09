@@ -16,7 +16,7 @@
 # define GREEN "\033[32m"
 # define BLUE "\033[34m"
 # define YELLOW "\033[33m"
-# define CYAN "\033[36m"
+# define PURPLE "\033[36m"
 # define RED "\033[31m"
 # define RESET_COLOR "\033[0m"
 
@@ -56,7 +56,8 @@ typedef struct s_philo
 {
 	pthread_t			philo_thread;
 	int					philo_id;
-	int					not_dead;
+	int					dead;
+	int					has_eaten;
 	pthread_mutex_t		*right_fork;
 	pthread_mutex_t		*left_fork;
 	t_data				*data;
@@ -73,7 +74,8 @@ typedef enum e_error
 	ERR_JOINING_THREADS,
 	ERR_PHILOS_FUNCT,
 	ERR_GET_TIME,
-	ERR_PARSING
+	ERR_PARSING,
+	DEAD = -1
 }						t_error;
 
 // utils
@@ -90,7 +92,7 @@ int						parse_arguments(int argc, char **argv, t_data *data);
 
 // simulation
 int						init_run_thread(t_data *data, t_philo **philo);
-int						philo_routine(t_philo *philo);
+int						run_philo_thread(t_philo *philo);
 
 // time
 long					getmillisec(void);
