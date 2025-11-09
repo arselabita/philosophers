@@ -14,7 +14,7 @@
 
 static int	parsing_helper(char *nums, int *number) // check for overflowing
 {
-	long	value;
+	long value;
 
 	if (ft_valid_number(nums) == EXIT_FAILURE)
 	{
@@ -28,42 +28,46 @@ static int	parsing_helper(char *nums, int *number) // check for overflowing
 		return (EXIT_FAILURE);
 	}
 	*number = (int)value;
-	return (EXIT_SUCCESS);
+	return (SUCCESS);
 }
 
-int arg_check(int argc, char **argv, int number, t_data *data)
+static int	arg_check(int argc, char **argv, int number, t_data *data)
 {
 	if (argc == 6)
 	{
-		if (parsing_helper(argv[5], &number))
+		if (parsing_helper(argv[5], &number) != SUCCESS)
 			return (EXIT_FAILURE);
 		data->number_of_times_each_philosopher_must_eat = number;
 	}
 	else
 		data->number_of_times_each_philosopher_must_eat = -1;
-	
 	printf("\n**********DEBUGING*************\n");
-	printf (" num of philos: %d\n time to die: %d\n time to eat: %d\n time to sleep: %d\n num of times ph eat: %d\n", data->num_of_philos, data->time.time_to_die, data->time.time_to_eat, data->time.time_to_sleep, data->number_of_times_each_philosopher_must_eat);
+	printf(" num of philos: %d\n time to die: %d\n time to eat:\
+		%d\n time to sleep: %d\n num of times ph eat: %d\n",
+		data->num_of_philos, data->time.time_to_die, data->time.time_to_eat,
+		data->time.time_to_sleep,
+		data->number_of_times_each_philosopher_must_eat);
 	printf("*******************************\n");
-	
-	if (data->num_of_philos <= 0 || data->num_of_philos > 200 || data->time.time_to_die <= 0 \
-		|| data->time.time_to_eat <= 0 || data->time.time_to_sleep <= 0)
-		{
-			print_error("Error: All arguments must be greater than 0.\n");
-			return (EXIT_FAILURE);
-		}
-	if (argc == 6 && data->number_of_times_each_philosopher_must_eat < 0)
+	if (data->num_of_philos <= 0 || data->num_of_philos > 200
+		|| data->time.time_to_die <= 0 || data->time.time_to_eat <= 0
+		|| data->time.time_to_sleep <= 0)
 	{
-		print_error("Error: number_of_times_each_philosopher_must_eat must be > than -1.\n");
+		print_error("Error: All arguments must be greater than 0.\n");
 		return (EXIT_FAILURE);
 	}
-	return (EXIT_SUCCESS);
+	if (argc == 6 && data->number_of_times_each_philosopher_must_eat < 0)
+	{
+		print_error("Error: number_of_times_each_philosopher_must_eat must be > than\
+			-1.\n");
+		return (EXIT_FAILURE);
+	}
+	return (SUCCESS);
 }
 
 int	parse_arguments(int argc, char **argv, t_data *data)
 {
-	int		i;
-	int		number;
+	int	i;
+	int	number;
 
 	i = 1;
 	while (i < argc)
@@ -82,7 +86,7 @@ int	parse_arguments(int argc, char **argv, t_data *data)
 		data->time.time_to_sleep = number;
 		i++;
 	}
-	if (arg_check(argc, argv, number, data) == EXIT_FAILURE)
-		return (EXIT_FAILURE);		
-	return (EXIT_SUCCESS);
+	if (arg_check(argc, argv, number, data) != SUCCESS)
+		return (EXIT_FAILURE);
+	return (SUCCESS);
 }
