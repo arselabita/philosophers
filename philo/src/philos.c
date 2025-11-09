@@ -24,7 +24,7 @@
 //				then the left fork.
 /////////////////////
 
-static	void routine(t_philo *philo)
+static void	routine(t_philo *philo)
 {
 	if (philo->philo_id % 2 == 0)
 	{
@@ -47,9 +47,11 @@ static	void routine(t_philo *philo)
 
 static int	philo_routine_even(t_philo *philo)
 {
+	int	i;
+
 	if (philo->data->num_of_philos % 2 == 0)
 	{
-		int i = 0;
+		i = 0;
 		while (i < philo->data->num_of_philos)
 		{
 			routine(philo);
@@ -61,21 +63,19 @@ static int	philo_routine_even(t_philo *philo)
 
 int	philo_routine(t_philo *philo)
 {
-
-	philo->data->fork = ft_calloc(philo->data->num_of_philos, sizeof(pthread_mutex_t));
+	philo->data->fork = ft_calloc(philo->data->num_of_philos,
+			sizeof(pthread_mutex_t));
 	if (!philo->data->fork)
 		return (ERR_ALLOCATING);
 	philo->left_fork = &philo->data->fork[(philo->philo_id - 1)];
 	philo->right_fork = &philo->data->fork[(philo->philo_id
 			% philo->data->num_of_philos)];
-
 	// printf("\n**********DEBUGING*************\n");
 	// printf ("left fork: %d\n", (philo->philo_id - 1
 	//		+ philo->data->num_of_philos) % philo->data->num_of_philos);
 	// printf ("right fork: %d\n", (philo->philo_id + 1)
 	//	% philo->data->num_of_philos);
 	// printf("*******************************\n");
-
 	if (philo_routine_even(philo) != EXIT_SUCCESS)
 		return (print_error("Failed at routine philo even.\n"), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
