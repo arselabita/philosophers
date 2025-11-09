@@ -53,6 +53,35 @@ Data Races (Race Conditions) — What Are They?
 
 
 
+NEW THEORY AND FUNCTIONS:
+   - threads
+   - mutex
+   - function pointer
+   - enums
+   - colored text with write and ANSI escape codes
+
+
+***** 
+ENUMS:
+   - An enum is a special type that represents a group of constants (unchangeable values).
+   - Note that the last item does not need a comma.
+   - It is not required to use uppercase, but often considered as good practice.
+   - Enum is short for "enumerations", which means "specifically listed".
+
+To access the enum, you must create a variable of it.
+Inside the main() method, specify the enum keyword, followed by the name of the enum (Level) 
+and then the name of the enum variable (myVar in this example):
+         ''' enum Level myVar; '''
+   
+-> By default, the first item (LOW) has the value 0, the second (MEDIUM) has the value 1, etc.
+
+Why And When To Use Enums?
+Enums are used to give names to constants, which makes the code easier to read and maintain.
+
+Use enums when you have values that you know aren't going to change, 
+   like month days, days, colors, deck of cards, etc.
+*****
+
 
 Sources:
 https://en.wikipedia.org/wiki/Dining_philosophers_problem
