@@ -49,7 +49,7 @@ static void	take_forks(t_philo *philo)
 // 	{
 // 		usleep(10);
 // 		if (died)
-// 			return;
+// 			return ;
 // 	}
 // }
 
@@ -60,22 +60,19 @@ static int	philo_routine(t_philo *philo)
 	if (philo->data->num_of_philos % 2 == 0)
 	{
 		i = 0;
-		while ((philo->data->number_of_times_each_philosopher_must_eat == -1)
-			|| i < philo->data->number_of_times_each_philosopher_must_eat)
+		while (philo->dead != -1
+			&& ((philo->data->number_of_times_each_philosopher_must_eat == -1)
+				|| i < philo->data->number_of_times_each_philosopher_must_eat))
 		{
 			take_forks(philo);
-
 			print_msg(philo, "is eating");
-			philo->has_eaten = getmillisec();
+			philo->last_meal = getmillisec();
 			usleep(philo->data->time.time_to_eat * 1000);
-
 			pthread_mutex_unlock(philo->right_fork);
 			pthread_mutex_unlock(philo->left_fork);
-
 			print_msg(philo, "is sleeping");
 			usleep(philo->data->time.time_to_sleep * 1000);
-			print_msg(philo, "is thinking");
-
+			print_msg(philo, "is thinking"); // ?
 			i++;
 		}
 	}
@@ -86,21 +83,15 @@ static int	philo_routine(t_philo *philo)
 			|| i < philo->data->number_of_times_each_philosopher_must_eat)
 		{
 			take_forks(philo);
-
 			print_msg(philo, "is eating");
-			philo->has_eaten = getmillisec();
 			usleep(philo->data->time.time_to_eat * 1000);
-
 			pthread_mutex_unlock(philo->right_fork);
 			pthread_mutex_unlock(philo->left_fork);
-
 			print_msg(philo, "is sleeping");
 			usleep(philo->data->time.time_to_sleep * 1000);
 			print_msg(philo, "is thinking");
-
 			i++;
 		}
-
 	}
 	return (SUCCESS);
 }
