@@ -46,6 +46,7 @@ typedef struct s_data
 	int					num_of_philos;
 	int					number_of_times_each_philosopher_must_eat;
 	long				start_time;
+	int					dead_flag;
 	pthread_mutex_t		printing;
 	pthread_mutex_t		*fork;
 	t_time				time;
@@ -55,13 +56,13 @@ typedef struct s_data
 typedef struct s_philo
 {
 	pthread_t			philo_thread;
+	pthread_t			monitoring_thread;
 	int					philo_id;
-	int					dead;
-	int					has_eaten;
+	int					*dead;
+	int					last_meal;
 	pthread_mutex_t		*right_fork;
 	pthread_mutex_t		*left_fork;
 	t_data				*data;
-
 }						t_philo;
 
 // enum for all the errors
