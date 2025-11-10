@@ -47,6 +47,7 @@ typedef struct s_data
 	int					number_of_times_each_philosopher_must_eat;
 	long				start_time;
 	int					dead_flag;
+	pthread_mutex_t		dead_mutex;
 	pthread_mutex_t		printing;
 	pthread_mutex_t		*fork;
 	t_time				time;
