@@ -60,8 +60,7 @@ static int	philo_routine(t_philo *philo)
 	if (philo->data->num_of_philos % 2 == 0)
 	{
 		i = 0;
-		while (philo->dead != -1
-			&& ((philo->data->number_of_times_each_philosopher_must_eat == -1)
+		while (*philo->dead == 0 && ((philo->data->number_of_times_each_philosopher_must_eat == -1)
 				|| i < philo->data->number_of_times_each_philosopher_must_eat))
 		{
 			take_forks(philo);
@@ -98,7 +97,6 @@ static int	philo_routine(t_philo *philo)
 
 int	run_philo_thread(t_philo *philo)
 {
-	philo->dead = -1; // current time and time to die
 	philo->left_fork = &philo->data->fork[(philo->philo_id - 1)];
 	philo->right_fork = &philo->data->fork[(philo->philo_id
 			% philo->data->num_of_philos)];
