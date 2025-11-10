@@ -110,9 +110,9 @@ int	ft_strcmp(char *s1, char *s2)
 
 void	print_error(const char *msg)
 {
-	write(STDERR_FILENO, RED, 1);
+	write(STDERR_FILENO, RED, 5);
 	write(STDERR_FILENO, msg, ft_strlen(msg));
-	write(STDERR_FILENO, RESET_COLOR, 1);
+	write(STDERR_FILENO, RED, 5);
 }
 
 void	print_msg(t_philo *philo, char *msg)
@@ -133,6 +133,9 @@ void	print_msg(t_philo *philo, char *msg)
 	else if (ft_strcmp(msg, "died") == 0)
 		color = RED;
 	pthread_mutex_lock(&data->printing);
-	printf("%s[%ld ms] %d %s\033[0m\n", color, calc_time(data), philo->philo_id, msg);
+	if (*philo->dead != -1)
+		printf("%s[%ld ms] %d %s\033[0m\n", color, calc_time(data), philo->philo_id, msg);
+	if (ft_strcmp(msg, "died") == 0)
+		*philo->dead = -1;
 	pthread_mutex_unlock(&data->printing);
 }
