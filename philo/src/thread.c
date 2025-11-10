@@ -23,17 +23,33 @@ static void	*philo_thread_start(void *arg)
 	run_philo_thread(philo); // here i do sleeping, eating, thinking
 	return (NULL);
 }
-static void	*monitoring_thread(void *arg)
+static void	*start_monitoring(void *arg)
 {
+	////////////////////////////
+	// All philosophers store the address of data->dead_flag.
+	// So when any thread updates it, everyone else sees the change
+	// immediately (shared memory).
+	///////////////////////////
 	t_philo	*philo;
 
-	while (*philo->dead != -1)
+	philo = (t_philo *)arg;
+
+	while (philo->data->dead_flag == 0)
 	{
-		if (getmillisec() - philo->last_meal > philo->data->time.time_to_die)
+		int i = 0;
+		
+		while (i < philo->data->num_of_philos)
 		{
-			print_msg(philo, "died");
-			*philo->dead = -1;
-			break ;
+			if (getmillisec() - philo[i].last_meal > philo->data->time.time_to_die)
+			{
+				pthread_mutex_lock(&philo->data->dead_mutex);
+				if (philo->data->dead_flag == 0)
+					print_msg(&philo[i], "died");
+				*philo->dead = 1;
+				pthread_mutex_unlock(&philo->data->dead_mutex);
+				return (NULL);
+			}
+			i++;
 		}
 		usleep(1000);
 	}
@@ -52,6 +68,8 @@ int	init_run_thread(t_data *data, t_philo **philo)
 	{
 		(*philo)[i].philo_id = i + 1;
 		(*philo)[i].data = data;
+		(*philo)[i].dead = &data->dead_flag; //i assign each death to the death flag
+		(*philo)[i].last_meal = getmillisec();
 		if (pthread_create(&(*philo)[i].philo_thread, NULL, &philo_thread_start,
 				&(*philo)[i]) != 0)
 			return (print_error("Failed to creating threads.\n"),
@@ -59,9 +77,8 @@ int	init_run_thread(t_data *data, t_philo **philo)
 		usleep(100);
 		i++;
 	}
-	if (pthread_create(&(*philo)[i].monitoring_thread, NULL, &monitoring_thread,
-			&(*philo)) != 0)
-		;
+	pthread_create(&(*philo)->monitoring_thread, NULL, &start_monitoring, *philo);
+	pthread_join((*philo)->monitoring_thread, NULL);
 	i = 0;
 	while (i < data->num_of_philos)
 	{
