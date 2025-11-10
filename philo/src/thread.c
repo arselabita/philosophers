@@ -20,9 +20,23 @@ static void	*philo_thread_start(void *arg)
 	/////////
 	// syncronize... if any pthread_create failed return NULL
 	////////
-	// calling a function for even and odd philos routine
-	//usleep(400);
 	run_philo_thread(philo); // here i do sleeping, eating, thinking
+	return (NULL);
+}
+static void	*monitoring_thread(void *arg)
+{
+	t_philo	*philo;
+
+	while (*philo->dead != -1)
+	{
+		if (getmillisec() - philo->last_meal > philo->data->time.time_to_die)
+		{
+			print_msg(philo, "died");
+			*philo->dead = -1;
+			break ;
+		}
+		usleep(1000);
+	}
 	return (NULL);
 }
 
@@ -40,11 +54,14 @@ int	init_run_thread(t_data *data, t_philo **philo)
 		(*philo)[i].data = data;
 		if (pthread_create(&(*philo)[i].philo_thread, NULL, &philo_thread_start,
 				&(*philo)[i]) != 0)
-			return (print_error("Failed to create thread.\n"),
-				ERR_CREATING_THREADS);
+			return (print_error("Failed to creating threads.\n"),
+				ERR_JOINING_THREADS);
 		usleep(100);
 		i++;
 	}
+	if (pthread_create(&(*philo)[i].monitoring_thread, NULL, &monitoring_thread,
+			&(*philo)) != 0)
+		;
 	i = 0;
 	while (i < data->num_of_philos)
 	{
