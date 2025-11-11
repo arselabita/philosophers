@@ -14,12 +14,12 @@
 
 /////////////////////
 // Fork Acquisition Order:
-//
+//  
 //	For Example:
 //		Even-ID:
 //			Philosophers (P0, P2): Pick up the left fork first,
 //				then the right fork.
-//		Odd-ID:
+//	Odd-ID:
 //			Philosophers (P1, P3): Pick up the right fork first,
 //				then the left fork.
 /////////////////////
@@ -42,17 +42,6 @@ static void	take_forks(t_philo *philo)
 	}
 }
 
-// ft_usleep(200)
-// {
-// 	getstart_time;
-// 	while (1 < 100)
-// 	{
-// 		usleep(10);
-// 		if (died)
-// 			return ;
-// 	}
-// }
-
 static int	philo_routine(t_philo *philo)
 {
 	int	i;
@@ -60,9 +49,11 @@ static int	philo_routine(t_philo *philo)
 	if (philo->data->num_of_philos % 2 == 0)
 	{
 		i = 0;
+		pthread_mutex_lock(&philo->data->printing);
 		while (philo->data->dead_flag == 0 && ((philo->data->number_of_times_each_philosopher_must_eat == -1)
 				|| i < philo->data->number_of_times_each_philosopher_must_eat))
 		{
+			pthread_mutex_unlock(&philo->data->printing);
 			take_forks(philo);
 			pthread_mutex_lock(&philo->data->dead_mutex);
 			philo->last_meal = getmillisec();
@@ -79,25 +70,10 @@ static int	philo_routine(t_philo *philo)
 
 			print_msg(philo, "is thinking"); // ?
 			i++;
+			pthread_mutex_lock(&philo->data->printing);
 		}
+		pthread_mutex_unlock(&philo->data->printing);
 	}
-	// else
-	// {
-	// 	i = 0;
-	// 	while (((philo->data->number_of_times_each_philosopher_must_eat == -1)
-	// 		|| i < philo->data->number_of_times_each_philosopher_must_eat))
-	// 	{
-	// 		take_forks(philo);
-	// 		philo->last_meal = getmillisec();
-	// 		print_msg(philo, "is eating");
-	// 		usleep(philo->data->time.time_to_eat * 1000);
-	// 		pthread_mutex_unlock(philo->right_fork);
-	// 		pthread_mutex_unlock(philo->left_fork);
-	// 		print_msg(philo, "is sleeping");
-	// 		usleep(philo->data->time.time_to_sleep * 1000);
-	// 		print_msg(philo, "is thinking");
-	// 		i++;
-	// 	}
 	return (SUCCESS);
 }
 
