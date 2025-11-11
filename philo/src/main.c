@@ -21,7 +21,7 @@
 int	main(int argc, char **argv)
 {
 	t_error	result;
-	t_data	data;
+	t_data	data ;
 	t_philo	*philo;
 
 	philo = NULL;
@@ -37,7 +37,6 @@ int	main(int argc, char **argv)
 	if (result != SUCCESS)
 		return (print_error("Error: Failed to parse arguments.\n"),
 			ERR_PARSING);
-	data.dead_flag = 0;
 	pthread_mutex_init(&data.printing, NULL);
 	pthread_mutex_init(&data.dead_mutex, NULL);
 	data.fork = ft_calloc(data.num_of_philos,

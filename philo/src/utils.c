@@ -132,10 +132,15 @@ void	print_msg(t_philo *philo, char *msg)
 		color = PURPLE;
 	else if (ft_strcmp(msg, "died") == 0)
 		color = RED;
+
+
+
 	pthread_mutex_lock(&data->printing);
-	 if (philo->data->dead_flag == 0)
-		printf("%s%ld %d %s\033[0m\n", color, calc_time(data), philo->philo_id, msg);
+	if (philo->data->dead_flag == 0)
+		printf("%s%ld %d %s\033[0m\n", color, calc_time(data), philo->philo_id,
+			msg);
 	if (ft_strcmp(msg, "died") == 0)
-	 	philo->data->dead_flag = 1;
+		philo->data->dead_flag = 1;
 	pthread_mutex_unlock(&data->printing);
+	
 }

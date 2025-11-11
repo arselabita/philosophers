@@ -27,6 +27,7 @@
 # include <stdlib.h>   // malloc, free funct
 # include <sys/time.h> // gettimeofday
 # include <unistd.h>   // for sleep funct
+# include <string.h> // memset
 
 typedef struct s_data	t_data;
 typedef struct s_time	t_time;
@@ -51,6 +52,7 @@ typedef struct s_data
 	pthread_mutex_t		printing;
 	pthread_mutex_t		*fork;
 	t_time				time;
+	t_philo				*philo;
 }						t_data;
 
 // and the philo struct
