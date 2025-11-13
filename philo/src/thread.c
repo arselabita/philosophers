@@ -35,7 +35,9 @@ static void	*start_monitoring(void *arg)
 	while (1)
 	{
 		pthread_mutex_lock(&data->dead_mutex);
-		time_since_last_meal = getmillisec() - data->philo[i].last_meal;
+		// printf("current time %ld\n time to die %d\n", calc_time(data), data->philo->last_meal);
+		time_since_last_meal = calc_time(data) - data->philo->last_meal;
+		// printf("time of meals %ld\n time to die %d\n", time_since_last_meal, data->time.time_to_die);
 		if (time_since_last_meal > data->time.time_to_die)
 		{
 			//puts("yolo");

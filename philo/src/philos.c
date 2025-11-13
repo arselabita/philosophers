@@ -56,7 +56,7 @@ static int	philo_routine(t_philo *philo)
 			pthread_mutex_unlock(&philo->data->printing);
 			take_forks(philo);
 			pthread_mutex_lock(&philo->data->dead_mutex);
-			philo->last_meal = getmillisec();
+			philo->last_meal = calc_time(philo->data);
 			pthread_mutex_unlock(&philo->data->dead_mutex);
 
 			print_msg(philo, "is eating");
@@ -74,6 +74,7 @@ static int	philo_routine(t_philo *philo)
 		}
 		pthread_mutex_unlock(&philo->data->printing);
 	}
+	// printf("lol");
 	return (SUCCESS);
 }
 
