@@ -38,9 +38,7 @@ static void	*start_monitoring(void *arg)
 			break;
 		}
 		pthread_mutex_lock(&philo->data->dead_mutex);
-		// printf("current time %ld\n time to die %d\n", calc_time(data), data->philo->last_meal);
 		time_since_last_meal = getmillisec() - philo->last_meal;
-		// printf("time of meals %ld\n time to die %ld\n", time_since_last_meal, philo->last_meal);
 		if (time_since_last_meal > philo->data->time.time_to_die)
 		{
 			pthread_mutex_unlock(&philo->data->dead_mutex);

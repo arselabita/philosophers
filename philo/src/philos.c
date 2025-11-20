@@ -46,12 +46,15 @@ static int	philo_routine(t_philo *philo)
 {
 	int	i;
 
-	if (philo->data->num_of_philos % 2 == 0)
-	{
+	//if (philo->data->num_of_philos % 2 == 0)
+	//{
 		i = 0;
+		if (philo->philo_id % 2 !=  0)
+			my_usleep(philo->data->time.time_to_eat);
+
 		pthread_mutex_lock(&philo->data->printing);
 		while (philo->data->dead_flag == 0 && ((philo->data->number_of_times_each_philosopher_must_eat == -1)
-				|| i <= philo->data->number_of_times_each_philosopher_must_eat))
+				|| i < philo->data->number_of_times_each_philosopher_must_eat))
 		{
 			pthread_mutex_unlock(&philo->data->printing);
 			take_forks(philo);
@@ -70,14 +73,22 @@ static int	philo_routine(t_philo *philo)
 
 			print_msg(philo, "is sleeping");
 			my_usleep(philo->data->time.time_to_sleep);
-
-			print_msg(philo, "is thinking"); // ?
+			if (philo->data->num_of_philos % 2 != 0)
+			{
+				print_msg(philo, "is thinking");
+				my_usleep(philo->data->time.time_to_eat * 2 \
+					- philo->data->time.time_to_sleep);
+			}
+			else
+			{
+				print_msg(philo, "is thinking"); // ?
+				my_usleep(1);
+			}
 			i++;
 			pthread_mutex_lock(&philo->data->printing);
 		}
 		pthread_mutex_unlock(&philo->data->printing);
-	}
-	// printf("lol");
+			// printf("lol");
 	return (SUCCESS);
 }
 
