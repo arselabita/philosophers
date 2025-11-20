@@ -117,10 +117,8 @@ void	print_error(const char *msg)
 
 void	print_msg(t_philo *philo, char *msg)
 {
-	t_data	*data;
 	char	*color;
 
-	data = philo->data;
 	color = RESET_COLOR;
 	if (ft_strcmp(msg, "is eating") == 0)
 		color = GREEN;
@@ -133,16 +131,15 @@ void	print_msg(t_philo *philo, char *msg)
 	else if (ft_strcmp(msg, "died") == 0)
 		color = RED;
 
-	pthread_mutex_lock(&data->printing);
+	pthread_mutex_lock(&philo->data->printing);
 	if (ft_strcmp(msg, "died") == 0)
 	{
 		philo->data->dead_flag = 1;
-		printf("%s%ld %d %s\033[0m\n", color, calc_time(data), philo->philo_id,
+		printf("%s%ld %d %s\033[0m\n", color, calc_time(philo->data), philo->philo_id,
 			msg);
 	}
 	if (philo->data->dead_flag == 0)
-		printf("%s%ld %d %s\033[0m\n", color, calc_time(data), philo->philo_id,
+		printf("%s%ld %d %s\033[0m\n", color, calc_time(philo->data), philo->philo_id,
 			msg);
-	pthread_mutex_unlock(&data->printing);
-
+	pthread_mutex_unlock(&philo->data->printing);
 }

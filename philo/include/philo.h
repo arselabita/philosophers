@@ -20,14 +20,16 @@
 # define RED "\033[31m"
 # define RESET_COLOR "\033[0m"
 
-# include <limits.h>   // size_t, INT_MAX, INT_MIN
-# include <pthread.h>  // POSIX thread library
-# include <stdint.h>   // SIZE_MAX
-# include <stdio.h>    // printf() funct
-# include <stdlib.h>   // malloc, free funct
-# include <sys/time.h> // gettimeofday
-# include <unistd.h>   // for sleep funct
-# include <string.h> // memset
+# include <limits.h>    // size_t, INT_MAX, INT_MIN
+# include <pthread.h>   // POSIX thread library
+# include <stdatomic.h> // forr atomics
+# include <stdbool.h>   // bool
+# include <stdint.h>    // SIZE_MAX
+# include <stdio.h>     // printf() funct
+# include <stdlib.h>    // malloc, free funct
+# include <string.h>    // memset
+# include <sys/time.h>  // gettimeofday
+# include <unistd.h>    // for sleep funct
 
 typedef struct s_data	t_data;
 typedef struct s_time	t_time;
@@ -50,6 +52,7 @@ typedef struct s_data
 	int					dead_flag;
 	pthread_mutex_t		dead_mutex;
 	pthread_mutex_t		printing;
+	_Atomic bool stop_flag;
 	pthread_mutex_t		*fork;
 	t_time				time;
 	t_philo				*philo;
@@ -61,8 +64,8 @@ typedef struct s_philo
 	pthread_t			philo_thread;
 	pthread_t			monitoring_thread;
 	int					philo_id;
-	int					*dead;
-	int					last_meal;
+	_Atomic int meals_count;
+	long					last_meal;
 	pthread_mutex_t		*right_fork;
 	pthread_mutex_t		*left_fork;
 	t_data				*data;
@@ -101,5 +104,6 @@ int						run_philo_thread(t_philo *philo);
 // time
 long					getmillisec(void);
 long					calc_time(t_data *data);
+void					my_usleep(uint64_t time);
 
 #endif

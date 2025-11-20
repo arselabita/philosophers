@@ -17,42 +17,41 @@ static void	*philo_thread_start(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	/////////
-	// syncronize... if any pthread_create failed return NULL
-	////////
 	run_philo_thread(philo); // here i do sleeping, eating, thinking
 	return (NULL);
 }
 
 static void	*start_monitoring(void *arg)
 {
-	t_data	*data;
+	t_philo *philo;
 	long time_since_last_meal;
 	int i;
 
-	data = (t_data *)arg;
+	philo = (t_philo *)arg;
 	i = 0;
+	// usleep(4000);
 	while (1)
 	{
-		pthread_mutex_lock(&data->dead_mutex);
-		// printf("current time %ld\n time to die %d\n", calc_time(data), data->philo->last_meal);
-		time_since_last_meal = calc_time(data) - data->philo->last_meal;
-		// printf("time of meals %ld\n time to die %d\n", time_since_last_meal, data->time.time_to_die);
-		if (time_since_last_meal > data->time.time_to_die)
+		if(philo[i].meals_count >= philo->data->number_of_times_each_philosopher_must_eat)
 		{
-			//puts("yolo");
-			// pthread_mutex_lock(&data->printing);	
-			// data->dead_flag = 1;
-			// pthread_mutex_unlock(&data->printing);	
-			pthread_mutex_unlock(&data->dead_mutex);
-			print_msg(&data->philo[i], "died");
+			philo->data->stop_flag = true;
+			break;
+		}
+		pthread_mutex_lock(&philo->data->dead_mutex);
+		// printf("current time %ld\n time to die %d\n", calc_time(data), data->philo->last_meal);
+		time_since_last_meal = getmillisec() - philo->last_meal;
+		// printf("time of meals %ld\n time to die %ld\n", time_since_last_meal, philo->last_meal);
+		if (time_since_last_meal > philo->data->time.time_to_die)
+		{
+			pthread_mutex_unlock(&philo->data->dead_mutex);
+			print_msg(&philo[i], "died");
 			break ;
 		}
-		pthread_mutex_unlock(&data->dead_mutex);
-		if (i == data->num_of_philos)
+		pthread_mutex_unlock(&philo->data->dead_mutex);
+		if (i == philo->data->num_of_philos)
 			i = -1;
 		i++;
-		usleep(1000);
+		// usleep(1000);
 	}
 	return (NULL);
 }
@@ -61,27 +60,42 @@ int	init_run_thread(t_data *data, t_philo **philo)
 {
 	int	i;
 
+	data->stop_flag = false;
 	*philo = ft_calloc(data->num_of_philos, sizeof(t_philo));
 	if (!*philo)
-		return (ERR_ALLOCATING);
-
+	return (ERR_ALLOCATING);
+	
 	data->philo = *philo;
 	i = 0;
 	while (i < data->num_of_philos)
 	{
 		(*philo)[i].philo_id = i + 1;
 		(*philo)[i].data = data;
+
 		pthread_mutex_lock(&data->dead_mutex);
 		(*philo)[i].last_meal = data->start_time;
 		pthread_mutex_unlock(&data->dead_mutex);
+		// (*philo)[i].meals_count = 0;
+
 		if (pthread_create(&(*philo)[i].philo_thread, NULL, &philo_thread_start,
 				&(*philo)[i]) != 0)
-			return(print_error("Failed to create philosopher thread.\n"), ERR_ALLOCATING);
+		{
+			print_error("Failed to create philosopher thread.\n");
+			int j = 0;
+			while (j < i)
+			{
+				pthread_join((*philo)[j].philo_thread, NULL);
+				j++;
+			}
+			free(*philo);
+			return(ERR_ALLOCATING);
+		}
 		i++;
 	}
+	usleep(1);
 
 	// monitoring all threads
-	if (pthread_create(&(*philo)->monitoring_thread, NULL, &start_monitoring,data) != 0)
+	if (pthread_create(&(*philo)->monitoring_thread, NULL, &start_monitoring, (*philo)) != 0)
 		return (print_error("Failed to create monitoring thread.\n"), ERR_ALLOCATING);
 	/// joining the finished threads
 	
@@ -89,8 +103,22 @@ int	init_run_thread(t_data *data, t_philo **philo)
 	while (i < data->num_of_philos)
 	{
 		if (pthread_join((*philo)[i].philo_thread, NULL) != 0)
-		return (print_error("Failed to join threads.\n"),
-		ERR_JOINING_THREADS);
+		{
+			int j = 0;
+			while (j < data->num_of_philos)
+			{
+				pthread_join((*philo)[j].philo_thread, NULL);
+				j++;
+			}
+				i = 0;
+	// while (i < data->num_of_philos)
+	// 	pthread_mutex_destroy(&data->fork[i++]);
+	// free(data->fork);
+	// pthread_mutex_destroy(&data->printing);
+	// pthread_mutex_destroy(&data->dead_mutex);
+			free(*philo);
+			return(ERR_JOINING_THREADS);
+		}
 		i++;
 	}
 
@@ -100,9 +128,9 @@ int	init_run_thread(t_data *data, t_philo **philo)
 	i = 0;
 	while (i < data->num_of_philos)
 		pthread_mutex_destroy(&data->fork[i++]);
+	free(data->fork);
 	pthread_mutex_destroy(&data->printing);
 	pthread_mutex_destroy(&data->dead_mutex);
-	free(data->fork);
 	free(*philo);
 	return (EXIT_SUCCESS);
 }

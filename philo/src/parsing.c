@@ -45,7 +45,8 @@ static int	arg_check(int argc, char **argv, int number, t_data *data)
 		|| data->time.time_to_die <= 0 || data->time.time_to_eat <= 0
 		|| data->time.time_to_sleep <= 0)
 	{
-		print_error("Error: All arguments must be greater than 0.\n");
+		print_error("Error: All arguments must be greater than 0 or greater than 200 \
+			for num of philos.\n");
 		return (EXIT_FAILURE);
 	}
 	if (argc == 6 && data->number_of_times_each_philosopher_must_eat < 0)
