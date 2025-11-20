@@ -12,8 +12,7 @@
 
 # the compiler flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Iinclude --fsanitize=pthread
-RM = rm -f
+CFLAGS = -Wall -Wextra -Werror -Iinclude 
 MAKE = make
 
 # executable name
