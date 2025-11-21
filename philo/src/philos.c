@@ -52,7 +52,7 @@ static int	philo_routine(t_philo *philo)
 	pthread_mutex_lock(&philo->data->printing);
 	while (!philo->data->stop_flag
 		&& ((philo->data->number_of_times_each_philosopher_must_eat == -1)
-			|| i < philo->data->number_of_times_each_philosopher_must_eat))
+			|| i <= philo->data->number_of_times_each_philosopher_must_eat))
 	{
 		pthread_mutex_unlock(&philo->data->printing);
 		take_forks(philo);
