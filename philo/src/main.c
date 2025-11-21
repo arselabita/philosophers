@@ -21,8 +21,9 @@
 int	main(int argc, char **argv)
 {
 	t_error	result;
-	t_data	data ;
+	t_data	data;
 	t_philo	*philo;
+	int		i;
 
 	philo = NULL;
 	if (argc < 5 || argc > 6)
@@ -39,10 +40,22 @@ int	main(int argc, char **argv)
 			ERR_PARSING);
 	pthread_mutex_init(&data.printing, NULL);
 	pthread_mutex_init(&data.dead_mutex, NULL);
-	data.fork = ft_calloc(data.num_of_philos,
-			sizeof(pthread_mutex_t));
+	data.fork = ft_calloc(data.num_of_philos, sizeof(pthread_mutex_t));
 	if (!data.fork)
 		return (ERR_ALLOCATING);
+	i = 0;
+	while (i < data.num_of_philos)
+	{
+		if (pthread_mutex_init(&data.fork[i], NULL) != 0)
+		{
+			print_error("Failed to initialize forrkk mutex.\n");
+			while (i-- > 0)
+				pthread_mutex_destroy(&data.fork[i]);
+			free(data.fork);
+			return (ERR_ALLOCATING);
+		}
+		i++;
+	}
 	data.start_time = getmillisec();
 	result = init_run_thread(&data, &philo);
 	if (result != SUCCESS)
