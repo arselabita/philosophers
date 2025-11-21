@@ -12,26 +12,29 @@
 
 #include "../include/philo.h"
 
-long getmillisec()
+long	getmillisec(void)
 {
-	struct timeval tv;
+	struct timeval	tv;
+
 	if (gettimeofday(&tv, NULL) == -1)
 		return (print_error("Failed to give time of day.\n"), ERR_GET_TIME);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
-long calc_time(t_data *data)
+
+long	calc_time(t_data *data)
 {
 	return (getmillisec() - data->start_time);
 }
 
-void my_usleep(uint64_t time, t_philo *philo)
+void	my_usleep(uint64_t time, t_philo *philo)
 {
-	uint64_t start;
-	
+	uint64_t	start;
+
 	start = getmillisec();
-	while (!philo->data->stop_flag)
+	while (getmillisec() - start < time)
 	{
-		if (getmillisec() - start < time)
-			usleep(500);
+		if (philo->data->stop_flag)
+			return ;
+		usleep(500);
 	}
 }
