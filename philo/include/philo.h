@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILOS_H
-# define PHILOS_H
+#ifndef PHILO_H
+# define PHILO_H
 
 # define GREEN "\033[32m"
 # define BLUE "\033[34m"
@@ -49,8 +49,8 @@ typedef struct s_data
 	int					num_of_philos;
 	int					number_of_times_each_philosopher_must_eat;
 	long				start_time;
-	_Atomic bool stop_flag;
-	_Atomic bool join_check;
+	_Atomic bool		stop_flag;
+	_Atomic bool		join_check;
 	pthread_mutex_t		dead_mutex;
 	pthread_mutex_t		printing;
 	pthread_mutex_t		*fork;
@@ -63,7 +63,7 @@ typedef struct s_philo
 {
 	int					philo_id;
 	pthread_t			philo_thread;
-	_Atomic int meals_count;
+	_Atomic int			meals_count;
 	long				last_meal;
 	pthread_t			waiter_thread;
 	pthread_mutex_t		*right_fork;
@@ -109,6 +109,7 @@ int						init_run_thread(t_data *data, t_philo **philo);
 int						run_philo_thread(t_philo *philo);
 void					init_waiter_thread(t_data *data, t_philo *philo);
 void					init_join_waiter_thread(t_data *data, t_philo *philo);
+void					init_special_thread(t_data *data, t_philo *philo);
 
 // time
 long					getmillisec(void);
