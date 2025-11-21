@@ -50,6 +50,7 @@ typedef struct s_data
 	int					number_of_times_each_philosopher_must_eat;
 	long				start_time;
 	_Atomic bool stop_flag;
+	_Atomic bool join_check;
 	pthread_mutex_t		dead_mutex;
 	pthread_mutex_t		printing;
 	pthread_mutex_t		*fork;
@@ -107,11 +108,11 @@ int						init_forks(t_data *data);
 int						init_run_thread(t_data *data, t_philo **philo);
 int						run_philo_thread(t_philo *philo);
 void					init_waiter_thread(t_data *data, t_philo *philo);
-void					join_waiter_thread(t_data *data, t_philo *philo);
+void					init_join_waiter_thread(t_data *data, t_philo *philo);
 
 // time
 long					getmillisec(void);
 long					calc_time(t_data *data);
-void					my_usleep(uint64_t time);
+void					my_usleep(uint64_t time, t_philo *philo);
 
 #endif
