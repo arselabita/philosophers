@@ -22,7 +22,7 @@ static void	*special_thread_start(void *arg)
 	pthread_mutex_lock(philo->right_fork);
 	print_msg(philo, "has taken a fork");
 	pthread_mutex_unlock(philo->right_fork);
-	my_usleep(philo->data->time.time_to_eat, philo);
+	my_usleep(philo->data->time.time_to_die, philo);
 	return (NULL);
 }
 
