@@ -50,7 +50,7 @@ static void	*start_monitoring(void *arg)
 		}
 		pthread_mutex_unlock(&philo->data->dead_mutex);
 		// move to the next philo
-		i = (i + 1) % philo->data->num_of_philos;
+		i = (i) % philo->data->num_of_philos;
 		usleep(1000);
 	}
 	return (NULL);
