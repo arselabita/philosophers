@@ -17,7 +17,6 @@ static void	*special_thread_start(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	pthread_mutex_init(philo->data->fork, NULL);
 	philo->right_fork = &philo->data->fork[(philo->philo_id
 			% philo->data->num_of_philos)];
 	pthread_mutex_lock(philo->right_fork);
