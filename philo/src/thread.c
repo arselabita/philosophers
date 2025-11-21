@@ -24,32 +24,37 @@ static void	*philo_thread_start(void *arg)
 static void	*start_monitoring(void *arg)
 {
 	t_philo *philo;
-	long time_since_last_meal;
 	int i;
 
 	philo = (t_philo *)arg;
 	i = 0;
-	// usleep(4000);
 	while (1)
 	{
-		if(philo[i].meals_count >= philo->data->number_of_times_each_philosopher_must_eat)
+		if (philo->data->stop_flag)
+			break;
+		if(philo->data->number_of_times_each_philosopher_must_eat != -1 && 
+			philo[i].meals_count >= philo->data->number_of_times_each_philosopher_must_eat)
 		{
+			pthread_mutex_lock(&philo->data->printing);
 			philo->data->stop_flag = true;
+			pthread_mutex_unlock(&philo->data->printing);
+
 			break;
 		}
 		pthread_mutex_lock(&philo->data->dead_mutex);
-		time_since_last_meal = getmillisec() - philo->last_meal;
-		if (time_since_last_meal > philo->data->time.time_to_die)
+		if (getmillisec() - philo[i].last_meal > philo->data->time.time_to_die)
 		{
 			pthread_mutex_unlock(&philo->data->dead_mutex);
 			print_msg(&philo[i], "died");
 			break ;
 		}
 		pthread_mutex_unlock(&philo->data->dead_mutex);
-		if (i == philo->data->num_of_philos)
-			i = -1;
-		i++;
-		// usleep(1000);
+		// if (i == philo->data->num_of_philos)
+		// 	i = 0;
+		// move to the next philo
+		i = (i + 1) % philo->data->num_of_philos;
+		// i++;
+		usleep(1000);
 	}
 	return (NULL);
 }
@@ -91,7 +96,6 @@ int	init_run_thread(t_data *data, t_philo **philo)
 		i++;
 	}
 	usleep(1);
-
 	// monitoring all threads
 	if (pthread_create(&(*philo)->monitoring_thread, NULL, &start_monitoring, (*philo)) != 0)
 		return (print_error("Failed to create monitoring thread.\n"), ERR_ALLOCATING);
