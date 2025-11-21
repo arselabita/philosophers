@@ -49,10 +49,9 @@ typedef struct s_data
 	int					num_of_philos;
 	int					number_of_times_each_philosopher_must_eat;
 	long				start_time;
-	int					dead_flag;
+	_Atomic bool 		stop_flag;
 	pthread_mutex_t		dead_mutex;
 	pthread_mutex_t		printing;
-	_Atomic bool stop_flag;
 	pthread_mutex_t		*fork;
 	t_time				time;
 	t_philo				*philo;
@@ -61,11 +60,11 @@ typedef struct s_data
 // and the philo struct
 typedef struct s_philo
 {
-	pthread_t			philo_thread;
-	pthread_t			monitoring_thread;
 	int					philo_id;
-	_Atomic int meals_count;
-	long					last_meal;
+	pthread_t			philo_thread;
+	_Atomic int 		meals_count;
+	long				last_meal;
+	pthread_t			monitoring_thread;
 	pthread_mutex_t		*right_fork;
 	pthread_mutex_t		*left_fork;
 	t_data				*data;
