@@ -6,7 +6,7 @@
 /*   By: abita <abita@student.42vienna.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:01:44 by abita             #+#    #+#             */
-/*   Updated: 2025/11/04 14:01:45 by abita            ###   ########.fr       */
+/*   Updated: 2025/11/21 21:11:17 by abita            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,21 +50,21 @@ static void	help(t_philo *philo)
 	pthread_mutex_unlock(&philo->data->dead_mutex);
 	print_msg(philo, "is eating");
 	philo->meals_count++;
-	my_usleep(philo->data->time.time_to_eat);
+	my_usleep(philo->data->time.time_to_eat, philo);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
 	print_msg(philo, "is sleeping");
-	my_usleep(philo->data->time.time_to_sleep);
+	my_usleep(philo->data->time.time_to_sleep, philo);
 	if (philo->data->num_of_philos % 2 != 0)
 	{
 		print_msg(philo, "is thinking");
 		my_usleep(philo->data->time.time_to_eat * 2
-			- philo->data->time.time_to_sleep);
+			- philo->data->time.time_to_sleep, philo);
 	}
 	else
 	{
 		print_msg(philo, "is thinking");
-		my_usleep(1);
+		my_usleep(1, philo);;
 	}
 }
 static int	philo_routine(t_philo *philo)
@@ -73,11 +73,11 @@ static int	philo_routine(t_philo *philo)
 
 	i = 0;
 	if (philo->philo_id % 2 != 0)
-		my_usleep(philo->data->time.time_to_eat);
+		my_usleep(philo->data->time.time_to_eat, philo);
 	pthread_mutex_lock(&philo->data->printing);
 	while (!philo->data->stop_flag
 		&& ((philo->data->number_of_times_each_philosopher_must_eat == -1)
-			|| i <= philo->data->number_of_times_each_philosopher_must_eat))
+			|| i < philo->data->number_of_times_each_philosopher_must_eat))
 	{
 		help(philo);
 		i++;
