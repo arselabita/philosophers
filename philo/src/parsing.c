@@ -14,7 +14,7 @@
 
 static int	parsing_helper(char *nums, int *number) // check for overflowing
 {
-	long value;
+	long	value;
 
 	if (ft_valid_number(nums) == EXIT_FAILURE)
 	{
@@ -85,7 +85,8 @@ static int	give_values(int argc, char **argv, t_data *data)
 		return (EXIT_FAILURE);
 	return (SUCCESS);
 }
-int parse_arguments(int argc, char **argv, t_data *data)
+
+int	parse_arguments(int argc, char **argv, t_data *data)
 {
 	if (argc < 5 || argc > 6)
 	{

@@ -74,7 +74,10 @@ int	init_run_thread(t_data *data, t_philo **philo)
 	if (!*philo)
 		return (ERR_ALLOCATING);
 	data->philo = *philo;
-	init_philos_thread(data, *philo);
+	if (data->num_of_philos == 1)
+		init_special_thread(data, *philo);
+	else
+		init_philos_thread(data, *philo);
 	init_join_waiter_thread(data, *philo);
 	if (!data->join_check)
 		join_philo_thread(data, *philo);

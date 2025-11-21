@@ -12,7 +12,7 @@
 
 #include "../include/philo.h"
 
-static void *start_monitoring(void *arg)
+static void	*start_monitoring(void *arg)
 {
 	t_philo	*philo;
 	int		i;
@@ -24,7 +24,8 @@ static void *start_monitoring(void *arg)
 		if (philo->data->stop_flag)
 			break ;
 		if (philo->data->number_of_times_each_philosopher_must_eat != -1
-			&& philo[i].meals_count == philo->data->number_of_times_each_philosopher_must_eat)
+			&& philo[i].meals_count == \
+			philo->data->number_of_times_each_philosopher_must_eat)
 			break ;
 		pthread_mutex_lock(&philo->data->dead_mutex);
 		if (getmillisec() - philo[i].last_meal > philo->data->time.time_to_die)

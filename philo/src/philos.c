@@ -41,6 +41,7 @@ static void	take_forks(t_philo *philo)
 		print_msg(philo, "has taken a fork");
 	}
 }
+
 static void	help(t_philo *philo)
 {
 	pthread_mutex_unlock(&philo->data->printing);
@@ -64,9 +65,10 @@ static void	help(t_philo *philo)
 	else
 	{
 		print_msg(philo, "is thinking");
-		my_usleep(1, philo);;
+		my_usleep(1, philo);
 	}
 }
+
 static int	philo_routine(t_philo *philo)
 {
 	int	i;

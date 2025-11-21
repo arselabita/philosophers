@@ -66,6 +66,7 @@ void	print_msg(t_philo *philo, char *msg)
 			philo->philo_id, msg);
 	pthread_mutex_unlock(&philo->data->printing);
 }
+
 int	init_forks(t_data *data)
 {
 	int	i;
@@ -81,13 +82,13 @@ int	init_forks(t_data *data)
 			print_error("Failed to initialize forrkk mutex.\n");
 			while (i > 0)
 				pthread_mutex_destroy(&data->fork[i--]);
-			// free(data->fork);
 			return (ERR_ALLOCATING);
 		}
 		i++;
 	}
-	return(SUCCESS);
+	return (SUCCESS);
 }
+
 void	clean_up(t_data *data, t_philo *philo)
 {
 	int	i;
@@ -95,10 +96,9 @@ void	clean_up(t_data *data, t_philo *philo)
 	i = 0;
 	while (i < data->num_of_philos)
 		pthread_mutex_destroy(&data->fork[i++]);
-	if(data->fork)
+	if (data->fork)
 		free(data->fork);
 	pthread_mutex_destroy(&data->printing);
 	pthread_mutex_destroy(&data->dead_mutex);
 	free(philo);
-
 }
