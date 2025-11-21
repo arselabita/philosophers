@@ -58,7 +58,7 @@ static int	arg_check(int argc, char **argv, int number, t_data *data)
 	return (SUCCESS);
 }
 
-int	parse_arguments(int argc, char **argv, t_data *data)
+static int	give_values(int argc, char **argv, t_data *data)
 {
 	int	i;
 	int	number;
@@ -82,6 +82,20 @@ int	parse_arguments(int argc, char **argv, t_data *data)
 		i++;
 	}
 	if (arg_check(argc, argv, number, data) != SUCCESS)
+		return (EXIT_FAILURE);
+	return (SUCCESS);
+}
+int parse_arguments(int argc, char **argv, t_data *data)
+{
+	if (argc < 5 || argc > 6)
+	{
+		print_error("Error: Invalid number of arguments.\n");
+		print_error("Usage: ./philo [number_of_philosophers] [time_to_die] \
+			[time_to_eat] [time_to_sleep] \
+			[number_of_times_each_philosopher_must_eat]\n");
+		return (EXIT_FAILURE);
+	}
+	if (give_values(argc, argv, data) != SUCCESS)
 		return (EXIT_FAILURE);
 	return (SUCCESS);
 }

@@ -41,7 +41,32 @@ static void	take_forks(t_philo *philo)
 		print_msg(philo, "has taken a fork");
 	}
 }
-
+static void	help(t_philo *philo)
+{
+	pthread_mutex_unlock(&philo->data->printing);
+	take_forks(philo);
+	pthread_mutex_lock(&philo->data->dead_mutex);
+	philo->last_meal = getmillisec();
+	pthread_mutex_unlock(&philo->data->dead_mutex);
+	print_msg(philo, "is eating");
+	philo->meals_count++;
+	my_usleep(philo->data->time.time_to_eat);
+	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(philo->left_fork);
+	print_msg(philo, "is sleeping");
+	my_usleep(philo->data->time.time_to_sleep);
+	if (philo->data->num_of_philos % 2 != 0)
+	{
+		print_msg(philo, "is thinking");
+		my_usleep(philo->data->time.time_to_eat * 2
+			- philo->data->time.time_to_sleep);
+	}
+	else
+	{
+		print_msg(philo, "is thinking");
+		my_usleep(1);
+	}
+}
 static int	philo_routine(t_philo *philo)
 {
 	int	i;
@@ -54,35 +79,11 @@ static int	philo_routine(t_philo *philo)
 		&& ((philo->data->number_of_times_each_philosopher_must_eat == -1)
 			|| i <= philo->data->number_of_times_each_philosopher_must_eat))
 	{
-		pthread_mutex_unlock(&philo->data->printing);
-		take_forks(philo);
-		pthread_mutex_lock(&philo->data->dead_mutex);
-		philo->last_meal = getmillisec();
-		pthread_mutex_unlock(&philo->data->dead_mutex);
-		print_msg(philo, "is eating");
-		philo->meals_count++;
-		// printf("meals count: %d\n", philo->meals_count);
-		my_usleep(philo->data->time.time_to_eat);
-		pthread_mutex_unlock(philo->right_fork);
-		pthread_mutex_unlock(philo->left_fork);
-		print_msg(philo, "is sleeping");
-		my_usleep(philo->data->time.time_to_sleep);
-		if (philo->data->num_of_philos % 2 != 0)
-		{
-			print_msg(philo, "is thinking");
-			my_usleep(philo->data->time.time_to_eat * 2
-				- philo->data->time.time_to_sleep);
-		}
-		else
-		{
-			print_msg(philo, "is thinking"); // ?
-			my_usleep(1);
-		}
+		help(philo);
 		i++;
 		pthread_mutex_lock(&philo->data->printing);
 	}
 	pthread_mutex_unlock(&philo->data->printing);
-	// printf("lol");
 	return (SUCCESS);
 }
 
