@@ -134,11 +134,11 @@ void	print_msg(t_philo *philo, char *msg)
 	pthread_mutex_lock(&philo->data->printing);
 	if (ft_strcmp(msg, "died") == 0)
 	{
-		philo->data->dead_flag = 1;
+		philo->data->stop_flag = true;
 		printf("%s%ld %d %s\033[0m\n", color, calc_time(philo->data), philo->philo_id,
 			msg);
 	}
-	if (philo->data->dead_flag == 0)
+	if (!philo->data->stop_flag)
 		printf("%s%ld %d %s\033[0m\n", color, calc_time(philo->data), philo->philo_id,
 			msg);
 	pthread_mutex_unlock(&philo->data->printing);
