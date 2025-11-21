@@ -75,7 +75,16 @@ int	init_run_thread(t_data *data, t_philo **philo)
 		return (ERR_ALLOCATING);
 	data->philo = *philo;
 	if (data->num_of_philos == 1)
+	{
+		(*philo)[0].philo_id = 1;
+		(*philo)[0].data = data;
+		(*philo)[0].meals_count = 0;
+		pthread_mutex_lock(&data->dead_mutex);
+		(*philo)[0].last_meal = data->start_time;
+		pthread_mutex_unlock(&data->dead_mutex);
 		init_special_thread(data, *philo);
+		data->join_check = true;
+	}
 	else
 		init_philos_thread(data, *philo);
 	init_join_waiter_thread(data, *philo);
