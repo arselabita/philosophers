@@ -6,7 +6,7 @@
 /*   By: abita <abita@student.42vienna.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 17:45:28 by abita             #+#    #+#             */
-/*   Updated: 2025/11/21 17:45:31 by abita            ###   ########.fr       */
+/*   Updated: 2025/11/21 21:11:43 by abita            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ int	init_forks(t_data *data)
 		if (pthread_mutex_init(&data->fork[i], NULL) != 0)
 		{
 			print_error("Failed to initialize forrkk mutex.\n");
-			while (i-- > 0)
-				pthread_mutex_destroy(&data->fork[i]);
-			free(data->fork);
+			while (i > 0)
+				pthread_mutex_destroy(&data->fork[i--]);
+			// free(data->fork);
 			return (ERR_ALLOCATING);
 		}
 		i++;
@@ -95,8 +95,10 @@ void	clean_up(t_data *data, t_philo *philo)
 	i = 0;
 	while (i < data->num_of_philos)
 		pthread_mutex_destroy(&data->fork[i++]);
-	free(data->fork);
+	if(data->fork)
+		free(data->fork);
 	pthread_mutex_destroy(&data->printing);
 	pthread_mutex_destroy(&data->dead_mutex);
 	free(philo);
+
 }
