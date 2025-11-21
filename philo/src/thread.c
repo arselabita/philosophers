@@ -49,11 +49,8 @@ static void	*start_monitoring(void *arg)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->data->dead_mutex);
-		// if (i == philo->data->num_of_philos)
-		// 	i = 0;
 		// move to the next philo
 		i = (i + 1) % philo->data->num_of_philos;
-		// i++;
 		usleep(1000);
 	}
 	return (NULL);
