@@ -30,8 +30,8 @@ SRCS = $(SRC_DIR)/main.c \
 	   $(SRC_DIR)/time.c \
 	   $(SRC_DIR)/philos.c \
 	   $(SRC_DIR)/waiter.c \
-	   $(SRC_DIR)/libft.c
-
+	   $(SRC_DIR)/libft.c \
+	   $(SRC_DIR)/special_thread.c
 
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
