@@ -15,7 +15,9 @@
 static void	*start_monitoring(void *arg)
 {
 	t_philo	*philo;
+	bool all_done;
 	int		i;
+	int j;
 
 	philo = (t_philo *)arg;
 	i = 0;
@@ -23,10 +25,22 @@ static void	*start_monitoring(void *arg)
 	{
 		if (philo->data->stop_flag)
 			break ;
-		if (philo->data->number_of_times_each_philosopher_must_eat != -1
-			&& philo[i].meals_count == \
-			philo->data->number_of_times_each_philosopher_must_eat)
-			break ;
+		// if (philo->data->number_of_times_each_philosopher_must_eat != -1
+		// 	&& philo[i].meals_count == \
+		// 	philo->data->number_of_times_each_philosopher_must_eat)
+		// 	break ;
+		if (philo->data->number_of_times_each_philosopher_must_eat != 1)
+		{
+			all_done = false;
+			j = 0;
+			while (philo[j].meals_count < philo->data->number_of_times_each_philosopher_must_eat)
+			{
+				all_done = true;
+				break;
+			}
+			if (all_done)
+				break;
+		}
 		pthread_mutex_lock(&philo->data->dead_mutex);
 		if (getmillisec() - philo[i].last_meal > philo->data->time.time_to_die)
 		{
@@ -36,6 +50,7 @@ static void	*start_monitoring(void *arg)
 		}
 		pthread_mutex_unlock(&philo->data->dead_mutex);
 		i = (i + 1) % philo->data->num_of_philos;
+		usleep(0);
 	}
 	return (NULL);
 }
