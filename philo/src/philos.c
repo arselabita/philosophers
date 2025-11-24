@@ -44,6 +44,8 @@ static void	take_forks(t_philo *philo)
 
 static void	help(t_philo *philo)
 {
+	int	ttt;
+
 	pthread_mutex_unlock(&philo->data->printing);
 	take_forks(philo);
 	pthread_mutex_lock(&philo->data->dead_mutex);
@@ -56,22 +58,10 @@ static void	help(t_philo *philo)
 	pthread_mutex_unlock(philo->left_fork);
 	print_msg(philo, "is sleeping");
 	my_usleep(philo->data->time.time_to_sleep, philo);
-	// if (philo->data->num_of_philos % 2 != 0)
-	// {
-	// 	print_msg(philo, "is thinking");
-	// 	my_usleep(philo->data->time.time_to_eat * 2
-	// 		- philo->data->time.time_to_sleep, philo);
-	// }
-	// else
-	// {
-	// 	print_msg(philo, "is thinking");
-	// 	my_usleep(1, philo);
-	// }
-	int ttt;
-	ttt = (philo->data->time.time_to_eat *
-		(1 + (philo->data->num_of_philos % 2)) - philo->data->time.time_to_sleep);
+	ttt = (philo->data->time.time_to_eat * \
+	(1 + (philo->data->num_of_philos % 2)) - \
+	philo->data->time.time_to_sleep);
 	my_usleep(ttt * (ttt > 0) + 1, philo);
-
 }
 
 static int	philo_routine(t_philo *philo)

@@ -31,10 +31,10 @@ void	my_usleep(uint64_t time, t_philo *philo)
 	uint64_t	start;
 
 	start = getmillisec();
+	if (philo->data->stop_flag)
+		return ;
 	while (getmillisec() - start < time)
 	{
-		if (philo->data->stop_flag)
-			return ;
 		usleep(500);
 	}
 }
